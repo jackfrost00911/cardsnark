@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance Transfer Calculator | CardSnark.cc</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e74c3c; /* Red for debt */
+            --success: #27ae60; /* Green for savings */
+            --bg: #f4f6f7;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        h1 { color: var(--primary); margin: 0; }
+        .subtitle { color: #7f8c8d; font-style: italic; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .input-group { margin-bottom: 15px; }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box; /* Fix padding issues */
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        button:hover { background-color: #1a252f; }
+
+        #results {
+            margin-top: 40px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 8px;
+            display: none; /* Hidden by default */
+        }
+
+        .snark-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stat-row:last-child { border-bottom: none; }
+        
+        .big-money {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--success);
+        }
+        
+        .bad-money { color: var(--accent); }
+
+        .disclaimer {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>CardSnark Balance Transfer Calculator</h1>
+        <p class="subtitle">Math is hard. Debt is harder. Let's see if we can fix this mess.</p>
+    </header>
+
+    <div class="grid">
+        <div>
+            <h3>Current Situation</h3>
+            <div class="input-group">
+                <label>Total Debt ($)</label>
+                <input type="number" id="debt" placeholder="e.g. 5000">
+            </div>
+            <div class="input-group">
+                <label>Current Interest Rate (APR %)</label>
+                <input type="number" id="currentApr" placeholder="e.g. 24.99">
+            </div>
+        </div>
+
+        <div>
+            <h3>New Card Offer</h3>
+            <div class="input-group">
+                <label>0% Intro Duration (Months)</label>
+                <input type="number" id="months" placeholder="e.g. 18">
+            </div>
+            <div class="input-group">
+                <label>Balance Transfer Fee (%)</label>
+                <input type="number" id="fee" value="3" placeholder="Usually 3 or 5">
+            </div>
+        </div>
+    </div>
+
+    <button onclick="calculateSnark()">Crunch the Numbers</button>
+
+    <div id="results">
+        <div id="snarkComment" class="snark-box">
+            </div>
+
+        <div class="stat-row">
+            <span>Cost of Transfer Fee (The "Gotcha"):</span>
+            <span id="feeCost" class="bad-money">$0.00</span>
+        </div>
+        <div class="stat-row">
+            <span>Interest You WOULD Have Paid (Ouch):</span>
+            <span id="oldInterest">$0.00</span>
+        </div>
+        <div class="stat-row">
+            <span><strong>Total Savings:</strong></span>
+            <span id="totalSavings" class="big-money">$0.00</span>
+        </div>
+        <div class="stat-row">
+            <span>Monthly Payment to be Debt Free by Promo End:</span>
+            <span id="monthlyPay" style="font-weight:bold;">$0.00</span>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        *This is basic math, not financial advice. If you miss a payment and the bank hits you with penalty APR, don't come crying to us.
+    </div>
+</div>
+
+<script>
+    function calculateSnark() {
+        // 1. Get values
+        const debt = parseFloat(document.getElementById('debt').value) || 0;
+        const currentApr = parseFloat(document.getElementById('currentApr').value) || 0;
+        const months = parseFloat(document.getElementById('months').value) || 0;
+        const feePercent = parseFloat(document.getElementById('fee').value) || 0;
+
+        // Validation
+        if (debt === 0 || months === 0) {
+            alert("We need actual numbers to work with here.");
+            return;
+        }
+
+        // 2. The Math
+        // How much the transfer fee costs upfront
+        const transferFeeCost = debt * (feePercent / 100);
+        
+        // New Balance on the new card
+        const newTotalDebt = debt + transferFeeCost;
+
+        // Monthly payment to kill debt before promo ends
+        const monthlyPayment = newTotalDebt / months;
+
+        // How much interest you WOULD pay on the old card 
+        // (Simplified calculation assuming you paid the same monthly amount)
+        // Formula: Standard amortization approximation for comparison
+        let oldBalance = debt;
+        let totalInterestOld = 0;
+        let monthlyRate = (currentApr / 100) / 12;
+
+        for (let i = 0; i < months; i++) {
+            let interest = oldBalance * monthlyRate;
+            totalInterestOld += interest;
+            let principal = monthlyPayment - interest;
+            oldBalance -= principal;
+            if (oldBalance < 0) oldBalance = 0;
+        }
+
+        // Net Savings
+        const savings = totalInterestOld - transferFeeCost;
+
+        // 3. Update UI
+        document.getElementById('feeCost').innerText = "$" + transferFeeCost.toFixed(2);
+        document.getElementById('oldInterest').innerText = "$" + totalInterestOld.toFixed(2);
+        document.getElementById('totalSavings').innerText = "$" + savings.toFixed(2);
+        document.getElementById('monthlyPay').innerText = "$" + monthlyPayment.toFixed(2);
+
+        // 4. Generate Snark
+        const snarkBox = document.getElementById('snarkComment');
+        let snark = "";
+
+        if (savings < 0) {
+            snark = "Wait. Stop. You are literally losing money on this deal. The transfer fee costs more than the interest you'd save. Do NOT do this.";
+            document.getElementById('totalSavings').style.color = "red";
+        } else if (savings < 100) {
+            snark = "You're saving like $50 bucks. I mean, it's better than a kick in the teeth, but is it worth the paperwork?";
+            document.getElementById('totalSavings').style.color = "orange";
+        } else if (savings > 1000) {
+            snark = "Okay, look at you beating the system! That's over a grand you're keeping away from the banks. Treat yourself to something nice. Actually don't, you're in debt.";
+            document.getElementById('totalSavings').style.color = "#27ae60";
+        } else {
+            snark = "Solid move. You're saving a decent chunk of change. Just make sure you actually pay it off before the 0% ends, or we're back to square one.";
+            document.getElementById('totalSavings').style.color = "#27ae60";
+        }
+
+        if (currentApr < 5) {
+            snark = "Your current interest rate is basically free. Why are you doing a balance transfer? Go outside.";
+        }
+
+        snarkBox.innerText = snark;
+        document.getElementById('results').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
