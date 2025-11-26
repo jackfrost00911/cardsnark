@@ -91,7 +91,21 @@
 
 .nav-item {
   position: relative;
+  height: 100%; /* Ensures the item fills the header height */
+  display: flex;
+  align-items: center;
 }
+
+/* This creates an invisible bridge between the button and the menu */
+.nav-item::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 20px; /* Covers the gap so the menu stays open */
+}
+  
 
 .nav-link {
   display: flex;
