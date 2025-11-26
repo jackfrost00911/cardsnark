@@ -1,0 +1,169 @@
+---
+layout: default
+title: Home
+description: Stop getting fleeced. Compare the best credit cards for travel, cash back, and building credit without the corporate BS.
+---
+
+<div class="hero-wrapper">
+    <div class="hero-content">
+        <span class="hero-badge">Updated for 2025</span>
+        <h1 class="hero-title">Stop Getting Fleeced By <br>Your Credit Card</h1>
+        <p class="hero-sub">Most credit card advice is written by robots for robots. We do unbiased, human comparisons for people who passed 7th-grade math.</p>
+    </div>
+
+    <div class="finder-card">
+        <div class="input-group">
+            <label for="goal">I want to...</label>
+            <select id="goal" class="select-styled">
+                <option>Select a goal...</option>
+                <option value="/cashback-cards/">Earn Cash Back (Free Money)</option>
+                <option value="/travel-cards/">Travel For Free (Points Game)</option>
+                <option value="/balance-transfer/">Kill My Credit Card Debt</option>
+                <option value="/building-credit/">Fix My Bad Credit Score</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label for="credit">My Credit Score is...</label>
+            <select id="credit" class="select-styled">
+                <option>I don't know / Average</option>
+                <option value="excellent">Excellent (750+)</option>
+                <option value="good">Good (700-749)</option>
+                <option value="fair">Fair (640-699)</option>
+                <option value="bad">Needs Work (<639)</option>
+            </select>
+        </div>
+        <button class="btn-action" onclick="findCard()">Find Cards</button>
+    </div>
+</div>
+
+<section class="section-container">
+    <div class="section-header">
+        <h2>Explore by Category</h2>
+    </div>
+    <div class="category-scroll">
+        <a href="/cashback-cards/" class="cat-pill">💰 Cash Back</a>
+        <a href="/travel-cards/" class="cat-pill">✈️ Travel</a>
+        <a href="/business-cards/" class="cat-pill">💼 Business</a>
+        <a href="/student-cards/" class="cat-pill">🎓 Student</a>
+        <a href="/no-annual-fee/" class="cat-pill">🆓 No Annual Fee</a>
+    </div>
+</section>
+
+<section class="section-container" style="background: white;">
+    <div class="section-header">
+        <h2>Cards That Actually Make Sense</h2>
+        <p style="color: var(--primary-light);">We reviewed 140+ cards. These 3 are the only ones that matter right now.</p>
+    </div>
+
+    <div class="grid-cards">
+        <article class="review-card">
+            <span class="card-tag">Best for Travel</span>
+            <div class="card-img-area">
+                <img src="/images/chase-sapphire-review.png" alt="Chase Sapphire Preferred">
+            </div>
+            <div class="card-content">
+                <h3>Chase Sapphire Preferred®</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span>Welcome Offer</span>
+                        <strong>60,000 Pts</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Annual Fee</span>
+                        <strong>$95</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Credit Req.</span>
+                        <strong>Excellent/Good</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Rewards</span>
+                        <strong>5x Travel</strong>
+                    </div>
+                </div>
+                <a href="/reviews/chase-sapphire-preferred.html" class="btn-outline">Read Full Review</a>
+            </div>
+        </article>
+
+        <article class="review-card">
+            <span class="card-tag" style="background:#e0f2fe; color:#0369a1;">Best Flat Rate</span>
+            <div class="card-img-area">
+                <img src="/images/citi-double-review.png" alt="Citi Double Cash">
+            </div>
+            <div class="card-content">
+                <h3>Citi® Double Cash Card</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span>Cash Back</span>
+                        <strong>2% Flat Rate</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Annual Fee</span>
+                        <strong>$0</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Intro APR</span>
+                        <strong>0% for 18mo</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Balance Transfer</span>
+                        <strong>Yes</strong>
+                    </div>
+                </div>
+                <a href="/reviews/citi-double-cash.html" class="btn-outline">Read Full Review</a>
+            </div>
+        </article>
+
+        <article class="review-card">
+            <span class="card-tag" style="background:#fef3c7; color:#b45309;">Best for Food</span>
+            <div class="card-img-area">
+                <img src="/images/amx-gold-review.png" alt="Amex Gold">
+            </div>
+            <div class="card-content">
+                <h3>American Express® Gold</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span>Dining</span>
+                        <strong>4x Points</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Groceries</span>
+                        <strong>4x Points</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Annual Fee</span>
+                        <strong>$325</strong>
+                    </div>
+                    <div class="stat-item">
+                        <span>Credits</span>
+                        <strong>$240 Dining</strong>
+                    </div>
+                </div>
+                <a href="/reviews/amex-gold.html" class="btn-outline">Read Full Review</a>
+            </div>
+        </article>
+    </div>
+
+    <div class="lead-magnet">
+        <h3>🎁 The "Travel Hacker" Cheat Sheet</h3>
+        <p>Don't want to read 50 articles? Get our 1-page PDF guide to flying business class for economy prices.</p>
+        <a href="/free-guide.html" class="btn-action" style="background: white; color: var(--primary);">Download Free PDF</a>
+    </div>
+</section>
+
+<section class="section-container" style="padding: 2rem; font-size: 0.8rem; color: #94a3b8; text-align: center;">
+    <p><strong>Advertiser Disclosure:</strong> CardSnark is an independent publisher. We may receive compensation if you click links to products on this page. We do not represent any bank or financial institution. The content on this page is accurate as of the posting date; however, some of the offers mentioned may have expired.</p>
+</section>
+
+<script>
+    function findCard() {
+        const select = document.getElementById('goal');
+        const value = select.value;
+        if (value && value !== 'Select a goal...') {
+            window.location.href = value;
+        } else {
+            alert("Come on, pick a goal. We can't read your mind.");
+        }
+    }
+  </script>
+  
