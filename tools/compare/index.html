@@ -1,0 +1,274 @@
+---
+layout: default
+title: Credit Card Comparison Tool - The Showdown
+description: Compare two credit cards head-to-head based on your actual spending. We do the math to see which one actually earns you more money.
+---
+
+<div class="page-header">
+    <span class="hero-badge" style="background: #f1f5f9; color: #475569;">VS. MODE</span>
+    <h1>The Head-to-Head<br>Calculator</h1>
+    <p>Don't guess. Do the math. Input your spending and card details below to see which one actually wins.</p>
+</div>
+
+<div class="section-container" style="max-width: 1000px;">
+    
+    <div style="background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; padding: 2rem; margin-bottom: 2rem;">
+        <h3 style="margin-top: 0; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem;">
+            <span style="color: var(--accent);">Step 1:</span> Monthly Spending
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">🍔 Dining & Takeout</label>
+                <input type="number" id="spendDining" class="calc-input" placeholder="$0">
+            </div>
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">🛒 Groceries</label>
+                <input type="number" id="spendGrocery" class="calc-input" placeholder="$0">
+            </div>
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">⛽ Gas / EV Charging</label>
+                <input type="number" id="spendGas" class="calc-input" placeholder="$0">
+            </div>
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">✈️ Travel / Hotels</label>
+                <input type="number" id="spendTravel" class="calc-input" placeholder="$0">
+            </div>
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">💼 Business / Bills</label>
+                <input type="number" id="spendBiz" class="calc-input" placeholder="$0">
+            </div>
+            <div class="input-group">
+                <label style="font-size: 0.85rem; font-weight: 600; color: #64748b; display: block; margin-bottom: 0.5rem;">🛍️ Everything Else</label>
+                <input type="number" id="spendOther" class="calc-input" placeholder="$0">
+            </div>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+        
+        <div class="card-input-box">
+            <div style="background: #f8fafc; padding: 1.5rem; border-bottom: 1px solid #e2e8f0;">
+                <input type="text" id="nameA" placeholder="Card A Name" style="width: 100%; font-size: 1.2rem; font-weight: 700; border: none; background: transparent; border-bottom: 2px solid #cbd5e1; outline: none;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <div class="input-row">
+                    <label>Annual Fee ($)</label>
+                    <input type="number" id="feeA" placeholder="0">
+                </div>
+                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #f1f5f9;">
+                <div class="rewards-section">
+                    <p style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 1rem;">Rewards Rate (%)</p>
+                    <div class="rate-row"><label>Dining</label><input type="number" id="rateADining" placeholder="%"></div>
+                    <div class="rate-row"><label>Groceries</label><input type="number" id="rateAGrocery" placeholder="%"></div>
+                    <div class="rate-row"><label>Gas</label><input type="number" id="rateAGas" placeholder="%"></div>
+                    <div class="rate-row"><label>Travel</label><input type="number" id="rateATravel" placeholder="%"></div>
+                    <div class="rate-row"><label>Business</label><input type="number" id="rateABiz" placeholder="%"></div>
+                    <div class="rate-row"><label>Other</label><input type="number" id="rateAOther" placeholder="%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-input-box">
+            <div style="background: #f8fafc; padding: 1.5rem; border-bottom: 1px solid #e2e8f0;">
+                <input type="text" id="nameB" placeholder="Card B Name" style="width: 100%; font-size: 1.2rem; font-weight: 700; border: none; background: transparent; border-bottom: 2px solid #cbd5e1; outline: none;">
+            </div>
+            <div style="padding: 1.5rem;">
+                <div class="input-row">
+                    <label>Annual Fee ($)</label>
+                    <input type="number" id="feeB" placeholder="0">
+                </div>
+                <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid #f1f5f9;">
+                <div class="rewards-section">
+                    <p style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #94a3b8; margin-bottom: 1rem;">Rewards Rate (%)</p>
+                    <div class="rate-row"><label>Dining</label><input type="number" id="rateBDining" placeholder="%"></div>
+                    <div class="rate-row"><label>Groceries</label><input type="number" id="rateBGrocery" placeholder="%"></div>
+                    <div class="rate-row"><label>Gas</label><input type="number" id="rateBGas" placeholder="%"></div>
+                    <div class="rate-row"><label>Travel</label><input type="number" id="rateBTravel" placeholder="%"></div>
+                    <div class="rate-row"><label>Business</label><input type="number" id="rateBBiz" placeholder="%"></div>
+                    <div class="rate-row"><label>Other</label><input type="number" id="rateBOther" placeholder="%"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin-top: 3rem; text-align: center;">
+        <button onclick="calculateWinner()" class="btn-action" style="font-size: 1.2rem; padding: 1rem 3rem; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);">Run Comparison</button>
+    </div>
+
+    <div id="resultArea" style="display: none; margin-top: 3rem; scroll-margin-top: 100px;">
+        <div style="background: #1e293b; color: white; border-radius: 16px; padding: 3rem; text-align: center; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, #f59e0b, #ec4899, #6366f1);"></div>
+            
+            <h2 id="winnerText" style="color: white; margin-bottom: 0.5rem; font-size: 2.5rem;">Winner Name</h2>
+            <div style="font-size: 1.2rem; color: #94a3b8; margin-bottom: 2rem;">Annual Net Value: <span id="winnerVal" style="color: #4ade80; font-weight: 700;">$0.00</span></div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 12px; max-width: 600px; margin: 0 auto; text-align: left;">
+                <p style="color: #e2e8f0; font-style: italic; margin: 0;">"<span id="snarkText">Analysis goes here...</span>"</p>
+            </div>
+
+            <div style="margin-top: 2rem; font-size: 0.9rem; color: #64748b;">
+                Beats the other card by <span id="diffVal" style="color: white;">$0.00</span> per year.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .calc-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+    .calc-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        outline: none;
+    }
+    
+    .card-input-box {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+    }
+
+    .input-row { margin-bottom: 1rem; }
+    .input-row label { display: block; font-size: 0.85rem; font-weight: 600; color: #64748b; margin-bottom: 0.5rem; }
+    .input-row input { 
+        width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; 
+    }
+
+    .rate-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        font-size: 0.9rem;
+        color: #334155;
+    }
+    
+    .rate-row input {
+        width: 60px;
+        padding: 0.25rem;
+        text-align: center;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        .card-input-box { margin-bottom: 1rem; }
+        .section-container > div:nth-child(2) { grid-template-columns: 1fr; }
+    }
+</style>
+
+<script>
+    function calculateWinner() {
+        // 1. GATHER SPEND
+        const s = {
+            dining: parseFloat(document.getElementById('spendDining').value) || 0,
+            grocery: parseFloat(document.getElementById('spendGrocery').value) || 0,
+            gas: parseFloat(document.getElementById('spendGas').value) || 0,
+            travel: parseFloat(document.getElementById('spendTravel').value) || 0,
+            biz: parseFloat(document.getElementById('spendBiz').value) || 0,
+            other: parseFloat(document.getElementById('spendOther').value) || 0
+        };
+
+        const totalAnnualSpend = (s.dining + s.grocery + s.gas + s.travel + s.biz + s.other) * 12;
+
+        // 2. CALC CARD FUNCTION
+        function calcCard(prefix) {
+            const fee = parseFloat(document.getElementById('fee' + prefix).value) || 0;
+            const rates = {
+                dining: parseFloat(document.getElementById('rate' + prefix + 'Dining').value) || 0,
+                grocery: parseFloat(document.getElementById('rate' + prefix + 'Grocery').value) || 0,
+                gas: parseFloat(document.getElementById('rate' + prefix + 'Gas').value) || 0,
+                travel: parseFloat(document.getElementById('rate' + prefix + 'Travel').value) || 0,
+                biz: parseFloat(document.getElementById('rate' + prefix + 'Biz').value) || 0,
+                other: parseFloat(document.getElementById('rate' + prefix + 'Other').value) || 0
+            };
+
+            const monthlyRewards = 
+                (s.dining * rates.dining/100) +
+                (s.grocery * rates.grocery/100) +
+                (s.gas * rates.gas/100) +
+                (s.travel * rates.travel/100) +
+                (s.biz * rates.biz/100) +
+                (s.other * rates.other/100);
+
+            return {
+                val: (monthlyRewards * 12) - fee,
+                fee: fee
+            };
+        }
+
+        // 3. EXECUTE
+        const cardA = calcCard('A');
+        const cardB = calcCard('B');
+        
+        const valA = cardA.val;
+        const valB = cardB.val;
+        
+        const nameA = document.getElementById('nameA').value || "Card A";
+        const nameB = document.getElementById('nameB').value || "Card B";
+        const diff = Math.abs(valA - valB).toFixed(2);
+
+        let winnerName = "";
+        let loserName = "";
+        let winVal = 0;
+        let winFee = 0;
+
+        if (valA > valB) {
+            winnerName = nameA; loserName = nameB; winVal = valA; winFee = cardA.fee;
+        } else {
+            winnerName = nameB; loserName = nameA; winVal = valB; winFee = cardB.fee;
+        }
+
+        // 4. THE ROASTING ENGINE (Sarcasm Logic)
+        let roast = "";
+
+        if (winVal < 0) {
+            roast = "Actually, both of these cards lose you money. Have you considered stuffing cash under a mattress? It yields better returns than this.";
+        } 
+        else if (diff < 15) {
+            roast = "You spent all this time inputting data to save... less than $15 a year. Your time must be very affordable.";
+        }
+        else if (winFee > 500 && winVal < 700) {
+            roast = `You're paying a $${winFee} annual fee for this? I hope that metal card makes a really cool sound when you drop it, because the math is barely working.`;
+        }
+        else if (s.dining > 1000) {
+            roast = "Based on your dining spend, I assume your kitchen is just for decoration. Nice.";
+        }
+        else if (s.travel > 2000) {
+            roast = "We get it, you're a 'Jet Setter.' Try not to post too many pictures of the airport lounge.";
+        }
+        else if (s.biz > 3000) {
+            roast = "Look at you, Business Tycoon. Don't forget to pay your quarterly taxes.";
+        }
+        else if (totalAnnualSpend > 100000) {
+            roast = "With spending like that, why are you asking a free internet calculator for help? Go hire an accountant.";
+        }
+        else {
+            roast = `I guess ${winnerName} is fine. It wins. Happy?`;
+        }
+
+        // 5. UPDATE UI
+        document.getElementById('winnerText').innerText = (valA === valB) ? "It's a Tie" : winnerName + " Wins";
+        document.getElementById('winnerVal').innerText = "$" + winVal.toFixed(2);
+        document.getElementById('snarkText').innerText = roast;
+        document.getElementById('diffVal').innerText = "$" + diff;
+
+        const res = document.getElementById('resultArea');
+        res.style.display = 'block';
+        res.scrollIntoView({ behavior: 'smooth' });
+    }
+                                                                 </script>
+                                                                 
