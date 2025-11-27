@@ -335,4 +335,248 @@ description: Stop guessing. Answer 7 questions and our algorithm will find the e
             id: 'amex-gold',
             name: "American Express® Gold Card",
             type: "personal",
-            scores: ["excellent",
+            scores: ["excellent","good"],
+            goal: ["rewards"],
+            cats: ["dining", "grocery"],
+            fee: 325,
+            gradient: "card-gradient-gold",
+            desc: "If you eat food, you need this card. 4x on dining and groceries is unbeatable.",
+            perks: ["4x Dining & Groceries", "$120 Uber Cash", "$100 Resy Credit"],
+            link: "/reviews/amex-gold.html"
+        },
+        {
+            id: 'savor',
+            name: "Capital One Savor",
+            type: "personal",
+            scores: ["excellent", "good"],
+            goal: ["rewards"],
+            cats: ["dining", "grocery"],
+            fee: 0,
+            gradient: "card-gradient-discover",
+            desc: "The foodie's best friend. 3% back on dining and groceries for $0 annual fee. (Formerly SavorOne)",
+            perks: ["3% Dining/Grocery", "3% Streaming", "No Annual Fee"],
+            link: "/reviews/capital-one-savor.html"
+        },
+        {
+            id: 'bcp',
+            name: "Blue Cash Preferred®",
+            type: "personal",
+            scores: ["excellent", "good"],
+            goal: ["rewards"],
+            cats: ["grocery", "gas"],
+            fee: 95,
+            gradient: "card-gradient-sapphire",
+            desc: "The suburban MVP. 6% cash back at supermarkets makes the annual fee irrelevant for families.",
+            perks: ["6% Supermarkets", "3% Gas/Transit", "Disney Bundle Credit"],
+            link: "/reviews/amex-blue-cash-preferred.html"
+        },
+        {
+            id: 'double-cash',
+            name: "Citi Double Cash®",
+            type: "personal",
+            scores: ["excellent", "good", "fair"],
+            goal: ["rewards", "bt"],
+            cats: ["general"],
+            fee: 0,
+            gradient: "card-gradient-citi",
+            desc: "Boring but brilliant. 2% flat cash back on everything. No categories to track.",
+            perks: ["2% Flat Rate", "No Annual Fee", "18-Month Balance Transfer"],
+            link: "/reviews/citi-double-cash.html"
+        },
+
+        // BUSINESS
+        {
+            id: 'ink-pref',
+            name: "Ink Business Preferred®",
+            type: "business",
+            scores: ["excellent", "good"],
+            goal: ["rewards"],
+            cats: ["travel", "general"],
+            fee: 95,
+            gradient: "card-gradient-sapphire",
+            desc: "The best business bonus out there. Huge points if your business spends money on ads or travel.",
+            perks: ["3x Ads/Travel", "100k Bonus Points", "Cell Phone Protection"],
+            link: "/reviews/ink-business-preferred.html"
+        },
+        {
+            id: 'ink-unl',
+            name: "Ink Business Unlimited®",
+            type: "business",
+            scores: ["excellent", "good"],
+            goal: ["rewards"],
+            cats: ["general"],
+            fee: 0,
+            gradient: "card-gradient-plat",
+            desc: "Simple 1.5% cash back for your business with no annual fee. Set it and forget it.",
+            perks: ["1.5% Flat Rate", "No Annual Fee", "0% Intro APR"],
+            link: "/reviews/ink-business-unlimited.html"
+        },
+
+        // BUILDER / DEBT
+        {
+            id: 'simplicity',
+            name: "Citi Simplicity®",
+            type: "personal",
+            scores: ["good", "fair"],
+            goal: ["bt"],
+            cats: ["general"],
+            fee: 0,
+            gradient: "card-gradient-citi",
+            desc: "Stop the bleeding. 21 months of 0% APR on balance transfers. The longest break from interest you can get.",
+            perks: ["21 Months 0% APR", "No Late Fees", "No Penalty APR"],
+            link: "/reviews/citi-simplicity.html"
+        },
+        {
+            id: 'discover-secured',
+            name: "Discover it® Secured",
+            type: "personal",
+            scores: ["bad", "fair"],
+            goal: ["build", "rewards"],
+            cats: ["general"],
+            fee: 0,
+            gradient: "card-gradient-discover",
+            desc: "The only secured card that rewards you. Earn cash back while you fix your credit score.",
+            perks: ["2% Gas/Dining", "Cashback Match", "Refundable Deposit"],
+            link: "/reviews/discover-it-secured.html"
+        },
+        {
+            id: 'freedom-rise',
+            name: "Chase Freedom Rise℠",
+            type: "personal",
+            scores: ["fair", "bad"],
+            goal: ["build", "rewards"],
+            cats: ["general"],
+            fee: 0,
+            gradient: "card-gradient-sapphire",
+            desc: "New to credit? This is an unsecured card (no deposit) designed for beginners. Easiest approval if you bank with Chase.",
+            perks: ["1.5% Flat Cash Back", "No Annual Fee", "Credit Limit Increase Eval"],
+            link: "/reviews/chase-freedom-rise.html"
+        }
+    ];
+
+    function findMatch() {
+        // 1. Get Values
+        const form = {
+            score: document.querySelector('input[name="score"]:checked').value,
+            usage: document.querySelector('input[name="usage"]:checked').value,
+            goal: document.querySelector('input[name="goal"]:checked').value,
+            spend: document.querySelector('input[name="spend"]:checked').value,
+            fee: parseInt(document.querySelector('input[name="fee"]:checked').value)
+        };
+
+        // 2. Show UI
+        const resultsArea = document.getElementById('results-area');
+        const loader = document.getElementById('loading');
+        const container = document.getElementById('cards-container');
+        
+        resultsArea.classList.remove('hidden');
+        loader.classList.remove('hidden');
+        container.classList.add('hidden');
+        container.innerHTML = ''; // Clear old results
+        
+        resultsArea.scrollIntoView({ behavior: 'smooth' });
+
+        // 3. Algorithm
+        setTimeout(() => {
+            const matches = cards.map(card => {
+                let points = 0;
+                let reasons = [];
+
+                // Hard Filter: Usage (Biz vs Personal)
+                if (card.type !== form.usage) return null;
+
+                // Hard Filter: Score
+                // If user has bad credit, remove cards that require excellent credit
+                if (form.score === 'bad' && !card.scores.includes('bad')) return null;
+                // If user has fair credit, remove super premium cards (Reserve, Venture X)
+                if (form.score === 'fair' && card.scores.includes('excellent') && !card.scores.includes('fair')) return null;
+
+                // Points: Goal
+                if (card.goal.includes(form.goal)) { points += 50; }
+                
+                // Points: Spend Category
+                if (card.cats.includes(form.spend)) { 
+                    points += 40; 
+                    reasons.push(`Great for ${form.spend}`);
+                } else if (card.cats.includes('general')) {
+                    points += 20; // Fallback
+                }
+
+                // Points: Fee
+                if (card.fee > form.fee) {
+                    points -= 100; // User doesn't want to pay this much
+                } else if (card.fee === 0 && form.fee === 0) {
+                    points += 30; // Perfect match for free card
+                }
+
+                // Boosts
+                if (form.score === 'excellent' && card.id === 'venture-x') points += 10;
+                if (form.score === 'bad' && card.id === 'discover-secured') points += 100; // Push builder cards to top for bad credit
+
+                return { ...card, points, matchReasons: reasons };
+            }).filter(c => c !== null && c.points > 0);
+
+            // Sort by points
+            matches.sort((a, b) => b.points - a.points);
+            
+            // Top 3
+            const topPicks = matches.slice(0, 3);
+
+            // 4. Render
+            if (topPicks.length === 0) {
+                container.innerHTML = `<div class="bg-red-50 p-6 rounded-xl text-center text-red-700">No exact matches found. Try adjusting your filters (especially Credit Score or Fee).</div>`;
+            } else {
+                topPicks.forEach((card, index) => {
+                    const isWinner = index === 0;
+                    
+                    const badgeHTML = card.matchReasons.map(r => 
+                        `<span class="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-2 py-1 rounded mr-2 uppercase tracking-wide">${r}</span>`
+                    ).join('');
+
+                    const html = `
+                        <div class="fade-in-up" style="animation-delay: ${index * 100}ms">
+                            <div class="bg-white border ${isWinner ? 'border-indigo-600 ring-4 ring-indigo-50 shadow-2xl' : 'border-gray-200 shadow-md'} rounded-2xl overflow-hidden relative flex flex-col md:flex-row">
+                                ${isWinner ? '<div class="bg-indigo-600 text-white text-xs font-bold uppercase py-1 px-3 absolute top-0 left-0 z-10">Top Match</div>' : ''}
+                                
+                                <div class="w-full md:w-64 p-6 flex flex-col justify-center items-center bg-slate-50 md:border-r border-gray-100">
+                                    <div class="w-full aspect-[1.586] ${card.gradient} rounded-xl shadow-lg mb-4 relative overflow-hidden group transition-transform hover:scale-105">
+                                        <div class="absolute bottom-3 left-4 text-white/80 font-mono text-xs tracking-widest">**** 4242</div>
+                                        <div class="absolute top-3 right-4 text-white/90"><i class="fa-solid fa-wifi rotate-90"></i></div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-3xl font-black text-slate-900">${Math.min(99, 85 + (3-index)*5)}%</div>
+                                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">Match Score</div>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                                    <div class="mb-3">${badgeHTML}</div>
+                                    <h3 class="text-2xl font-bold text-slate-900 mb-2">${card.name}</h3>
+                                    <p class="text-slate-600 italic mb-6">"${card.desc}"</p>
+                                    
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                                        ${card.perks.map(p => `<div class="flex items-center text-sm font-medium text-slate-700"><i class="fa-solid fa-check text-green-500 mr-2"></i> ${p}</div>`).join('')}
+                                    </div>
+
+                                    <div class="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
+                                        <div class="text-sm text-slate-500">
+                                            <span class="font-bold text-slate-900">$${card.fee}</span> Annual Fee
+                                        </div>
+                                        <a href="${card.link}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-slate-900 hover:bg-slate-800 transition shadow-lg">
+                                            Read Review
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += html;
+                });
+            }
+
+            loader.classList.add('hidden');
+            container.classList.remove('hidden');
+
+        }, 1200); // Fake delay for dramatic effect
+    }
+</script>
