@@ -123,13 +123,44 @@ description: "Download our free guide and learn how to fly business class for po
                                 <p class="text-slate-400">Instant download. No spam. Just gold.</p>
                             </div>
                             
-                            <div class="space-y-4">
-                                <a href="https://magic.beehiiv.com/v1/4c9578b8-c72b-41d3-aa5d-5094b2f56335" 
-                                   target="_blank"
-                                   rel="noopener"
-                                   class="block w-full py-4 px-6 bg-brand-gold hover:bg-brand-goldHover text-brand-dark font-black text-lg uppercase tracking-wide rounded-xl shadow-[0_4px_20px_rgba(255,215,0,0.3)] hover:shadow-[0_8px_30px_rgba(255,215,0,0.5)] hover:-translate-y-1 transition-all duration-300 transform">
-                                    Send Me The Guide 📚
-                                </a>
+                            
+<!-- Beehiiv Form Start -->
+<form action="https://www.beehiiv.com/subscribe?publication_id=ccaaa071-c5d8-4b8f-8a0c-d45658259f3b" 
+      method="POST" 
+      target="_blank"
+      class="space-y-4">
+
+    <!-- Email Input -->
+    <div>
+        <label for="email" class="sr-only">Email address</label>
+        <input id="email" 
+               name="email" 
+               type="email" 
+               autocomplete="email" 
+               required 
+               class="w-full px-5 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-gold focus:border-transparent transition-all" 
+               placeholder="Enter your email address">
+    </div>
+
+    <!-- THESE ARE THE UTM TRACKING TAGS -->
+    <!-- You don't need to change these. They automatically tag your subscribers. -->
+    <input type="hidden" name="utm_source" value="cardsnark_website">
+    <input type="hidden" name="utm_medium" value="landing_page">
+    <input type="hidden" name="utm_campaign" value="free_guide">
+
+    <!-- Submit Button -->
+    <button type="submit" 
+            class="w-full py-4 px-6 bg-brand-gold hover:bg-[#ffed4e] text-[#1a1a2e] font-black text-lg uppercase tracking-wide rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+        Send Me The Guide 📚
+    </button>
+    
+    <!-- OPTIONAL: Redirect to a Thank You page or the PDF directly -->
+    <!-- <input type="hidden" name="redirect_to" value="https://cardsnark.cc/thank-you/"> -->
+
+</form>
+<!-- Beehiiv Form End -->
+                                
+                                   
                                 
                                 <p class="text-xs text-slate-500">
                                     🔒 We respect your privacy. Unsubscribe anytime.
