@@ -1,6 +1,6 @@
-# Finance Comparison Website - CardSnark
+# CardSnark
 
-A professional credit card comparison website built with HTML, CSS, and JavaScript. Optimized for SEO and affiliate marketing.
+A professional credit card comparison website built with HTML, CSS, and JavaScript. Optimized for SEO and affiliate marketing.Humorous and sarcastic undertones to carve out its own special place.
 
 ## Features
 
@@ -16,7 +16,7 @@ A professional credit card comparison website built with HTML, CSS, and JavaScri
 
 /
 ├── index.html          # Homepage
-├── styles.css          # All styling
+├── main.css         # All styling
 ├── script.js           # JavaScript functionality
 └── README.md           # This file
 
@@ -30,26 +30,14 @@ A professional credit card comparison website built with HTML, CSS, and JavaScri
 
 ### Deploy to GitHub Pages
 
-1. **Create a new repository on GitHub**
-   - Go to github.com and create a new repository
-   - Name it something like `cardsnark` or `credit-cards`
-   - Make it public
 
-2. **Push your code to GitHub**
+ **Push your code to GitHub**
 git init
 git add .
 git commit -m "Initial commit - cardsnark"
 git branch -M main
 git remote add origin https://github.com/jackfrost00911/cardsnark.git
 git push -u origin main
-
-
-3. **Enable GitHub Pages**
-- Go to your repository Settings
-- Scroll to "Pages" section
-- Under "Source", select "main" branch
-- Click "Save"
-- Your site will be live at: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
 
 ## Next Steps
 
@@ -104,13 +92,7 @@ Find and replace "CardSnark" with your site name in:
 - `index.html` (logo, title, footer)
 - Update meta descriptions
 
-### Change Color Scheme
-Edit CSS variables in `styles.css`:
-:root {
---primary-color: #2563eb;  /* Change to your brand color */
---secondary-color: #10b981;
---accent-color: #f59e0b;
-}
+
 
 
 ### Add Your Analytics
@@ -189,4 +171,3 @@ This project is free to use for personal and commercial projects.
 
 Built with ❤️ for affiliate marketers
 
-**Good luck with your finance site!**
