@@ -360,4 +360,59 @@ description: Simulate how your credit score changes if you pay off debt, open a 
         if (newScore > 850) newScore = 850;
         if (newScore < 300) newScore = 300;
 
-        updateDashboard(score, newScore, n
+        updateDashboard(score, newScore, nnewBalance, newLimit, historyStatus, inquiryStatus, commentary);
+    }
+
+    function updateDashboard(oldS, newS, newBal, newLim, hist, inq, comm) {
+        const scoreDiv = document.getElementById('result-score');
+        const rateDiv = document.getElementById('result-rating');
+        
+        let start = oldS;
+        const end = newS;
+        const duration = 1000;
+        const startTime = performance.now();
+
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 4);
+            
+            const current = Math.floor(start + (end - start) * ease);
+            scoreDiv.innerText = current;
+
+            const deg = ((current - 300) / 550) * 180;
+            document.getElementById('gauge-fill').style.transform = `rotate(${deg}deg)`;
+
+            if (progress < 1) requestAnimationFrame(updateCounter);
+        }
+        requestAnimationFrame(updateCounter);
+
+        if(newS >= 800) rateDiv.innerText = "Exceptional";
+        else if(newS >= 740) rateDiv.innerText = "Very Good";
+        else if(newS >= 670) rateDiv.innerText = "Good";
+        else if(newS >= 580) rateDiv.innerText = "Fair";
+        else rateDiv.innerText = "Poor";
+
+        const badge = document.getElementById('points-badge');
+        const diff = newS - oldS;
+        if(diff > 0) {
+            badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm transition-all";
+            badge.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> +${diff} Points`;
+        } else if (diff < 0) {
+            badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-full font-bold text-sm transition-all";
+            badge.innerHTML = `<i class="fa-solid fa-arrow-trend-down"></i> ${diff} Points`;
+        } else {
+            badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-500 rounded-full font-bold text-sm transition-all";
+            badge.innerHTML = `<i class="fa-solid fa-minus"></i> No Change`;
+        }
+
+        const finalUtil = Math.round((newBal / newLim) * 100);
+        document.getElementById('res-util').innerText = finalUtil + "%";
+        document.getElementById('res-history').innerText = hist;
+        if(hist !== "100%") document.getElementById('res-history').className = "text-2xl font-black text-red-600";
+        else document.getElementById('res-history').className = "text-2xl font-black text-green-600";
+        
+        document.getElementById('res-inquiries').innerText = inq;
+        document.getElementById('res-analysis').innerText = comm;
+    }
+</script>
