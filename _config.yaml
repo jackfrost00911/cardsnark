@@ -1,0 +1,9 @@
+title: CardSnark
+email: cardsnarking@cardsnark.cc
+description: "Credit Card Reviews with Attitude"
+url: "https://cardsnark.cc" # CRITICAL FOR SEO
+twitter_username: CardSnarking
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  
