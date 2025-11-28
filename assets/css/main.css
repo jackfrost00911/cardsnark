@@ -406,4 +406,127 @@ a[aria-label="Follow on Reddit"]:hover .footer-icon { fill: #FF4500; }
   border: 2px dashed #ccc;
 }
 .newsletter-cta-block h3 { margin-top: 0; font-weight: 900; }
+/* --- BEST CARDS PAGE STYLES --- */
 
+.category-header {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  font-weight: 900;
+}
+
+.category-sub {
+  text-align: center;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto 40px;
+  font-size: 1.1rem;
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Gold is slightly wider */
+  gap: 30px;
+  align-items: start;
+  margin-bottom: 60px;
+}
+
+/* On mobile, stack them */
+@media (max-width: 768px) {
+  .winners-grid { grid-template-columns: 1fr; }
+}
+
+/* THE PODIUM CARDS */
+.card-podium {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 30px;
+  position: relative;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.card-podium:hover { transform: translateY(-5px); }
+
+/* Gold Styling */
+.card-podium.gold {
+  border: 2px solid #ffc107;
+  box-shadow: 0 10px 30px rgba(255, 193, 7, 0.15);
+}
+.ribbon {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffc107;
+  color: #000;
+  font-weight: 900;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Silver Styling */
+.card-podium.silver { border: 1px solid #ccc; }
+.ribbon-silver {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #e0e0e0;
+  color: #555;
+  font-weight: 800;
+  padding: 4px 15px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.card-podium h3 { margin-top: 10px; font-weight: 800; font-size: 1.5rem; }
+
+.card-stats {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0;
+  font-size: 0.9rem;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.snark-pitch { font-size: 1.05rem; line-height: 1.6; margin-bottom: 20px; }
+
+.pros-cons {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+.pros-cons span { display: block; margin-bottom: 5px; }
+.pros-cons .con { color: #d93025; }
+
+/* Buttons */
+.podium-btn {
+  display: block;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+.podium-btn:hover { background: #333; color: #fff; }
+
+.podium-btn.outline {
+  background: transparent;
+  border: 2px solid #000;
+  color: #000;
+}
+.podium-btn.outline:hover { background: #000; color: #fff; }
+
+.single-focus { max-width: 600px; margin: 0 auto; grid-template-columns: 1fr; }
+   
