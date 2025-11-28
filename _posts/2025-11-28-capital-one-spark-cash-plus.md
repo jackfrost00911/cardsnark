@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Capital One Spark Cash Plus Review 2025: The Heavy Lifter
 description: Capital One Spark Cash Plus review 2025: Unlimited 2% cash back with no preset spending limit. Is the $150 fee worth it for high spenders?
 ---

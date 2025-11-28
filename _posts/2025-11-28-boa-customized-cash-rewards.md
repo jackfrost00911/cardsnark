@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Bank of America® Customized Cash Rewards Review 2025
 description: Bank of America Customized Cash Rewards review 2025: 3% cash back in the category of your choice. Is it the most flexible no-fee card?
 ---

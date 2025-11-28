@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Capital One Platinum Secured Review 2025: The Comeback Kid
 description: Capital One Platinum Secured review 2025: No annual fee, refundable deposit, and an automatic credit line review. The best card for bad credit?
 ---

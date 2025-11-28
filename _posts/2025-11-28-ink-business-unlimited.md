@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Ink Business Unlimited® Review 2025: The "I Hate Math" Card
 description: Ink Business Unlimited review 2025: Is 1.5% cash back enough? Why this boring card is actually a powerhouse for business owners who hate math.
 ---

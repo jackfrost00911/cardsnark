@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Chase Freedom Unlimited Review 2025: The Swiss Army Knife of No-Fee Cards
 description: Chase Freedom Unlimited review 2025: 1.5% on everything, 3% dining/drugstores, $0 fee. The perfect no-fee card for the Chase ecosystem.
 ---

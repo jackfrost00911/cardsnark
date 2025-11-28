@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Discover it® Student Cash Back Review 2025: The GPA Booster
 description: Discover it Student Cash Back review 2025: 5% rotating categories, cash back match, and rewards for good grades. The best card for college students?
 ---

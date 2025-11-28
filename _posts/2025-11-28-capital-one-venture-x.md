@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Capital One Venture X Review 2025: The $5 Premium Travel Card
 description: Capital One Venture X review 2025: $395 fee with $300 credit = $5 net cost. 10x on hotels, Priority Pass lounges, 75K bonus. Is this the best premium travel card?
 ---

@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: U.S. Bank Altitude® Go Review 2025: The Dining Champion
 description: US Bank Altitude Go review 2025: 4x points on dining (now capped) with $0 annual fee. Is this still the best no-fee dining card?
 ---

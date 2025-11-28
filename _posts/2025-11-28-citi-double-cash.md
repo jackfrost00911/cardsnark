@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Citi Double Cash Review 2025: The Simplest 2% Cash Back Card
 description: Citi Double Cash review 2025: Flat 2% cash back on everything, $0 annual fee. The gold standard for simple, no-category cash back cards.
 ---

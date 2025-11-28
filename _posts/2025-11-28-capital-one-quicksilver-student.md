@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: post
 title: Capital One Quicksilver Student Review 2025: The "Set It and Forget It" Card
 description: Capital One Quicksilver Student review 2025: Unlimited 1.5% cash back with no annual fee. Is it the best simple student credit card?
 ---
