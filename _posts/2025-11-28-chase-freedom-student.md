@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Chase Freedom® Student Review 2025: The Legacy Card
-description: Chase Freedom Student review 2025: 1% cash back and a $20 annual bonus. Note: This card is no longer accepting new applications.
+categories: [reviews]
+title: "Chase Freedom® Student Review 2025: The Legacy Card"
+description: "Chase Freedom Student review 2025: 1% cash back and a $20 annual bonus. Note: This card is no longer accepting new applications."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

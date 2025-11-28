@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Ink Business Preferred® Review 2025: The "Side Hustle" King
-description: Ink Business Preferred review 2025: The 100k point bonus is massive, but can you hit the $8k spend? The best card for side hustles and digital marketers.
+categories: [reviews]
+title: "Ink Business Preferred® Review 2025: The "Side Hustle" King"
+description: "Ink Business Preferred review 2025: The 100k point bonus is massive, but can you hit the $8k spend? The best card for side hustles and digital marketers."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

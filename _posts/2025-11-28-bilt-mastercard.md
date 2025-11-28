@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Bilt Mastercard® Review 2025: The Renter's Holy Grail
-description: Bilt Mastercard review 2025: Earn points on rent without fees. Is it too good to be true? The only credit card renters should care about.
+categories: [reviews]
+title: "Bilt Mastercard® Review 2025: The Renter's Holy Grail"
+description: "Bilt Mastercard review 2025: Earn points on rent without fees. Is it too good to be true? The only credit card renters should care about."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

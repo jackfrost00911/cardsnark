@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Chase Sapphire Reserve® Review 2025: The New $795 Beast
-description: Chase Sapphire Reserve review 2025: The fee jumped to $795, but so did the perks. Is the new "coupon book" strategy worth it?
+categories: [reviews]
+title: "Chase Sapphire Reserve® Review 2025: The New $795 Beast"
+description: "Chase Sapphire Reserve review 2025: The fee jumped to $795, but so did the perks. Is the new "coupon book" strategy worth it?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

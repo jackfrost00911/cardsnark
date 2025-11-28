@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Chase Sapphire Preferred Review 2025
-description: Is the $95 annual fee worth it? We break down the math on the 60,000 point bonus.
+categories: [reviews]
+title: "Chase Sapphire Preferred Review 2025"
+description: "Is the $95 annual fee worth it? We break down the math on the 60,000 point bonus."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Citi Strata Premier℠ Card Review 2025: The Underrated Workhorse
-description: Citi Strata Premier review 2025: The most underrated travel card? 3x points on gas, groceries, dining, and travel for just $95.
+categories: [reviews]
+title: "Citi Strata Premier℠ Card Review 2025: The Underrated Workhorse"
+description: "Citi Strata Premier review 2025: The most underrated travel card? 3x points on gas, groceries, dining, and travel for just $95."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

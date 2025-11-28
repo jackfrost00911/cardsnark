@@ -1,7 +1,8 @@
 ---
 layout: post
-title: BankAmericard® Credit Card Review 2025: The Debt Eraser
-description: BankAmericard review 2025: 18 billing cycles of 0% APR. Is this the best balance transfer card for Bank of America customers?
+categories: [reviews]
+title: "BankAmericard® Credit Card Review 2025: The Debt Eraser"
+description: "BankAmericard review 2025: 18 billing cycles of 0% APR. Is this the best balance transfer card for Bank of America customers?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

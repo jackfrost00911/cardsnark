@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Blue Cash Preferred® Card Review 2025: The Suburban Survival Tool
-description: Amex Blue Cash Preferred review 2025: Is the $95 fee worth it for 6% on groceries? The math behind the best cash back card for families.
+categories: [reviews]
+title: "Blue Cash Preferred® Card Review 2025: The Suburban Survival Tool"
+description: "Amex Blue Cash Preferred review 2025: Is the $95 fee worth it for 6% on groceries? The math behind the best cash back card for families."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Bank of America® Student Cash Rewards Review 2025: The Flexible Choice
-description: Bank of America Student Cash Rewards review 2025: 3% cash back in a category of your choice. The most flexible student credit card?
+categories: [reviews]
+title: "Bank of America® Student Cash Rewards Review 2025: The Flexible Choice"
+description: "Bank of America Student Cash Rewards review 2025: 3% cash back in a category of your choice. The most flexible student credit card?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

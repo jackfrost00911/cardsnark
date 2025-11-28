@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Wells Fargo Reflect® Review 2025: The Long Haul
-description: Wells Fargo Reflect review 2025: Up to 21 months of 0% APR if you pay on time. Is this the longest balance transfer offer available?
+categories: [reviews]
+title: "Wells Fargo Reflect® Review 2025: The Long Haul"
+description: "Wells Fargo Reflect review 2025: Up to 21 months of 0% APR if you pay on time. Is this the longest balance transfer offer available?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">

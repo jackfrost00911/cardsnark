@@ -1,7 +1,8 @@
 ---
 layout: post
-title: Discover it® Cash Back Review 2025: The First-Year Rewards King
-description: Discover it Cash Back review 2025: 5% rotating categories with Cashback Match that DOUBLES all first-year rewards. Best card for beginners.
+categories: [reviews]
+title: "Discover it® Cash Back Review 2025: The First-Year Rewards King"
+description: "Discover it Cash Back review 2025: 5% rotating categories with Cashback Match that DOUBLES all first-year rewards. Best card for beginners."
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">
