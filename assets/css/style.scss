@@ -351,4 +351,59 @@ a[aria-label="Follow on Reddit"]:hover .footer-icon { fill: #FF4500; }
   .hamburger-inner::before { top: -8px; }
   .hamburger-inner::after { bottom: -8px; }
 }
+/* --- TRAVEL HACKS PAGE STYLES --- */
+
+/* The Warning Box (Red/Yellow) */
+.warning-box {
+  background-color: #fff3cd;
+  border-left: 5px solid #ffc107;
+  padding: 15px;
+  margin: 20px 0;
+  color: #856404;
+  font-size: 0.95rem;
+}
+.warning-box strong {
+  color: #d93025;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* The Pro Tip Box (Green/Black) */
+.pro-tip-box {
+  background-color: #111;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.pro-tip-box strong {
+  color: #4cd964; /* Hacker Green */
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* The Intro Text */
+.hack-intro .lead {
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.6;
+  border-left: 4px solid #000;
+  padding-left: 20px;
+  margin-bottom: 30px;
+}
+
+/* Bottom CTA Block */
+.newsletter-cta-block {
+  text-align: center;
+  background: #f4f4f4;
+  padding: 40px;
+  border-radius: 10px;
+  margin-top: 50px;
+  border: 2px dashed #ccc;
+}
+.newsletter-cta-block h3 { margin-top: 0; font-weight: 900; }
 
