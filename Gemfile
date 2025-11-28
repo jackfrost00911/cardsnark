@@ -28,3 +28,7 @@ end
 # You need this to run 'jekyll serve' on modern Linux.
 # Without it, the server will crash.
 gem "webrick"
+
+plugins:
+  - jekyll-sitemap
+
