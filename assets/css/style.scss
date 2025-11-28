@@ -90,4 +90,64 @@ h1, h2, h3, h4 {
 .prose p { margin-bottom: 1.5rem; font-size: 1.1rem; color: #334155; }
 .prose ul { margin-bottom: 1.5rem; padding-left: 1.5rem; }
 .prose li { margin-bottom: 0.5rem; }
-  
+  /* CardSnark Social Share Buttons */
+.share-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f0f0; /* Light grey default */
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.share-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor; /* Allows the icon to change color with text */
+}
+
+/* Hover Effects - Official Brand Colors */
+.share-btn:hover {
+  color: #fff; /* Icon turns white on hover */
+  transform: translateY(-3px); /* Little pop-up effect */
+}
+
+.share-btn.twitter:hover {
+  background-color: #000000; /* X Black */
+}
+
+.share-btn.facebook:hover {
+  background-color: #1877F2; /* Facebook Blue */
+}
+
+.share-btn.reddit:hover {
+  background-color: #FF4500; /* Reddit Orange */
+}
+
+.share-btn.linkedin:hover {
+  background-color: #0077B5; /* LinkedIn Blue */
+}
+
+/* Screen Reader Only Text (Accessibility/SEO) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
