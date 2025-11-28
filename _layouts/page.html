@@ -1,0 +1,49 @@
+---
+layout: default
+---
+
+<article class="page" itemscope itemtype="https://schema.org/WebPage">
+
+  <!-- 1. PAGE HEADER -->
+  <header class="page-header">
+    <h1 class="page-title" itemprop="headline">{{ page.title | escape }}</h1>
+    
+    <!-- Optional: Subtitle support if you add 'subtitle: text' to front matter -->
+    {% if page.subtitle %}
+      <p class="page-subtitle">{{ page.subtitle }}</p>
+    {% endif %}
+  </header>
+
+  <!-- 2. CONTENT BODY -->
+  <div class="page-content" itemprop="mainContentOfPage">
+    {{ content }}
+  </div>
+
+  <!-- 
+    NOTE: We do NOT include the 'Related Posts' or 'Author' bio here 
+    because this layout is for static info. 
+    
+    The Newsletter and Social Icons will appear automatically 
+    because they are in your 'footer.html'.
+  -->
+
+</article>
+
+<!-- 3. STATIC PAGE SCHEMA -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ page.title }}",
+  "description": "{{ page.description | strip_html | truncate: 160 }}",
+  "url": "{{ page.url | absolute_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.title }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}/assets/images/logo.png"
+    }
+  }
+}
+</script>
