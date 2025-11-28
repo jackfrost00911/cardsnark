@@ -1,0 +1,50 @@
+<header class="site-header">
+  <div class="header-wrapper">
+    
+    <!-- 1. LOGO AREA -->
+    <a class="site-title" href="{{ "/" | relative_url }}">
+      <!-- If you have a logo image, uncomment this line: -->
+      <!-- <img src="/assets/images/logo.png" alt="CardSnark Logo" class="logo-img"> -->
+      <span class="logo-text">CardSnark<span class="highlight">.cc</span></span>
+    </a>
+
+    <!-- 2. DESKTOP NAVIGATION -->
+    <nav class="site-nav">
+      <div class="trigger">
+        <a class="page-link" href="{{ '/reviews/' | relative_url }}">Reviews</a>
+        <a class="page-link" href="{{ '/travel-hacks/' | relative_url }}">Travel Hacks</a>
+        <a class="page-link" href="{{ '/best-cards/' | relative_url }}">Best Cards</a>
+        <a class="page-link" href="{{ '/about/' | relative_url }}">About</a>
+        <a class="cta-button" href="#newsletter">Join the Cult</a>
+      </div>
+    </nav>
+
+    <!-- 3. MOBILE MENU TOGGLE -->
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+
+  </div>
+
+  <!-- 4. MOBILE DROPDOWN (Hidden by default) -->
+  <div class="mobile-nav-overlay">
+    <nav class="mobile-nav-links">
+      <a href="{{ '/reviews/' | relative_url }}">Reviews</a>
+      <a href="{{ '/travel-hacks/' | relative_url }}">Travel Hacks</a>
+      <a href="{{ '/best-cards/' | relative_url }}">Best Cards</a>
+      <a href="{{ '/about/' | relative_url }}">About</a>
+      <a href="#newsletter" class="mobile-cta">Get the Newsletter</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Simple Vanilla JS to toggle mobile menu
+  document.querySelector('.mobile-menu-toggle').addEventListener('click', function() {
+    this.classList.toggle('is-active');
+    document.querySelector('.mobile-nav-overlay').classList.toggle('is-open');
+    document.body.classList.toggle('no-scroll'); // Prevents scrolling when menu is open
+  });
+</script>
