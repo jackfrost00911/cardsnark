@@ -1,0 +1,14 @@
+# CardSnark Robots File
+# We want Google to find everything.
+
+User-agent: *
+Allow: /
+
+# Block the back-end stuff
+Disallow: /Gemfile
+Disallow: /Gemfile.lock
+Disallow: /README.md
+Disallow: /deploy.sh
+
+# Point Google to the map
+Sitemap: https://cardsnark.cc/sitemap.xml
