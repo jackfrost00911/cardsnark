@@ -1,7 +1,7 @@
 ---
-layout: default
-title: Amex Business Platinum® Review 2025: The CEO's Credit Card
-description: Amex Business Platinum review 2025: Is the $695 fee worth it? We break down the 5x points on flights, Centurion Lounge access, and the 35% rebate.
+layout: post
+title: "Amex Business Platinum® Review 2025: The CEO's Credit Card"
+description: "Amex Business Platinum review 2025: Is the $695 fee worth it? We break down the 5x points on flights, Centurion Lounge access, and the 35% rebate."
 categories: [reviews]
 ---
 
