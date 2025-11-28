@@ -1,0 +1,76 @@
+# =============================================================
+# CARDSNARK SITE CONFIGURATION
+# =============================================================
+
+# --- SITE IDENTITY ---
+title: CardSnark
+email: hello@cardsnark.cc
+description: >-
+  The only credit card review site that isn't boring. We roast the banks, 
+  expose the fees, and help you travel for free.
+author: "CardSnark Editor"
+
+# --- URL SETTINGS (CRITICAL FOR SEO) ---
+# Do not add a trailing slash to the url
+url: "https://cardsnark.cc" 
+baseurl: "" 
+
+# --- SOCIAL MEDIA HANDLES ---
+# Used by themes and metadata
+twitter_username: cardsnarking
+github_username:  cardsnarking
+
+# --- BUILD SETTINGS ---
+markdown: kramdown
+highlighter: rouge
+permalink: /:categories/:title/
+
+# --- PLUGINS ---
+# These must match what is in your Gemfile
+plugins:
+  - jekyll-sitemap   # Generates sitemap.xml for Google
+  - jekyll-feed      # Generates feed.xml for RSS readers
+  - jekyll-paginate  # Handles page 1, page 2, etc.
+
+# --- PAGINATION ---
+# How many posts appear on the homepage before it creates "Page 2"
+paginate: 5
+paginate_path: "/page:num/"
+
+# --- SASS/CSS CONFIGURATION ---
+# Tells Jekyll where to look for your style files
+sass:
+  sass_dir: assets/css
+  style: compressed
+
+# --- FILE EXCLUDES ---
+# Keeps your build clean by ignoring these files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - .sass-cache
+  - .jekyll-cache
+  - README.md
+
+# --- DEFAULTS ---
+# This saves you time. It sets default Front Matter for all posts.
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "CardSnark Editor"
+      # Default fallback image if you forget to add one to a specific post
+      image: "/assets/images/cardsnark-social-share.jpg"
+  
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+      image: "/assets/images/cardsnark-social-share.jpg"
+      
