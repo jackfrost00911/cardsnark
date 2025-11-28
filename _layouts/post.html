@@ -1,0 +1,139 @@
+---
+layout: default
+---
+
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
+    
+    <div class="post-meta">
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: "%b %-d, %Y" }}
+      </time>
+      
+      {% if page.author %}
+        <span class="meta-separator">•</span>
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name">{{ page.author }}</span>
+        </span>
+      {% endif %}
+
+      <span class="meta-separator">•</span>
+      <span class="reading-time" title="Estimated read time">
+        {% assign words = content | number_of_words %}
+        {% if words < 360 %}
+          1 min read
+        {% else %}
+          {{ words | divided_by:180 }} min read
+        {% endif %}
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+    {% include social-share.html %}
+    
+    {{ content }}
+
+    <div class="share-bottom">
+      <p><strong>Found this useful (or at least funny)? Share the snark:</strong></p>
+      {% include social-share.html %}
+    </div>
+
+  </div>
+
+  <div class="related-section">
+    <hr>
+    <h3 class="related-title">Since you read that, you might also tolerate these:</h3>
+
+    <div class="related-grid">
+      {% assign maxRelated = 3 %}
+      {% assign maxRelatedCounter = 0 %}
+      
+      {% for post in site.posts %}
+        {% unless post.url == page.url %}
+          {% assign match = false %}
+          {% for category in post.categories %}
+            {% if page.categories contains category %}
+              {% assign match = true %}
+            {% endif %}
+          {% endfor %}
+
+          {% if match %}
+            <div class="related-card">
+              <a href="{{ post.url | relative_url }}">
+                {% if post.image %}
+                  <div class="related-image" style="background-image: url('{{ post.image | relative_url }}');"></div>
+                {% else %}
+                   <div class="related-image" style="background-color: #333;"></div>
+                {% endif %}
+                <div class="related-text">
+                  <h4>{{ post.title }}</h4>
+                  <small>{{ post.date | date: "%b %d, %Y" }}</small>
+                </div>
+              </a>
+            </div>
+            {% assign maxRelatedCounter = maxRelatedCounter | plus: 1 %}
+            {% if maxRelatedCounter >= maxRelated %}{% break %}{% endif %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+
+</article>
+
+{% if page.rating %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ page.product_name }}",
+  "image": "{{ site.url }}{{ page.image }}",
+  "description": "{{ page.description | strip_html | strip_newlines | truncate: 160 }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ page.brand }}"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "{{ page.rating }}",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "{{ page.author }}"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "{{ page.annual_fee }}",
+    "availability": "https://schema.org/InStock",
+    "url": "{{ page.url | absolute_url }}"
+  }
+}
+</script>
+{% endif %}
+
+{% unless page.rating %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ page.title }}",
+  "image": "{{ site.url }}{{ page.image }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ page.author | default: site.title }}"
+  },
+  "description": "{{ page.description | strip_html | strip_newlines | truncate: 160 }}"
+}
+</script>
+{% endunless %}
+                                                   
