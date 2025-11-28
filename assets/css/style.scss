@@ -150,4 +150,36 @@ h1, h2, h3, h4 {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+/* Footer Social Icons */
+.footer-social-icons {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.follow-text {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.social-links-grid {
+  display: flex;
+  justify-content: center; /* Centers them */
+  gap: 15px;
+}
+
+.footer-icon {
+  width: 24px;
+  height: 24px;
+  fill: #555; /* Default color */
+  transition: fill 0.2s ease;
+}
+
+/* Hover Colors */
+.footer-icon:hover { fill: #000; } /* Twitter Black */
+a[aria-label="Follow on Facebook"]:hover .footer-icon { fill: #1877F2; }
+a[aria-label="Follow on Instagram"]:hover .footer-icon { fill: #E1306C; }
+a[aria-label="Follow on Reddit"]:hover .footer-icon { fill: #FF4500; }
 
