@@ -29,6 +29,5 @@ end
 # Without it, the server will crash.
 gem "webrick"
 
-plugins:
-  - jekyll-sitemap
+
 
