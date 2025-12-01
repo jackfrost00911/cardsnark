@@ -4,7 +4,7 @@
 
 # --- SITE IDENTITY ---
 title: CardSnark
-email: hello@cardsnark.cc
+email: cardsnarking@cardsnark.cc
 description: >-
   The only credit card review site that isn't boring. We roast the banks, 
   expose the fees, and help you travel for free.
@@ -22,6 +22,7 @@ github_username:  cardsnarking
 
 # --- BUILD SETTINGS ---
 markdown: kramdown
+theme: minima
 highlighter: rouge
 permalink: /:categories/:title/
 
@@ -31,7 +32,7 @@ plugins:
   - jekyll-sitemap   # Generates sitemap.xml for Google
   - jekyll-feed      # Generates feed.xml for RSS readers
   - jekyll-paginate  # Handles page 1, page 2, etc.
-
+  
 # --- PAGINATION ---
 # How many posts appear on the homepage before it creates "Page 2"
 paginate: 5
@@ -74,3 +75,7 @@ defaults:
       layout: "page"
       image: "/assets/images/cardsnark-social-share.jpg"
       
+
+
+
+  
