@@ -32,7 +32,7 @@ plugins:
   - jekyll-sitemap   # Generates sitemap.xml for Google
   - jekyll-feed      # Generates feed.xml for RSS readers
   - jekyll-paginate  # Handles page 1, page 2, etc.
-  
+  - jekyll-seo-tag   # Handles seo 
 # --- PAGINATION ---
 # How many posts appear on the homepage before it creates "Page 2"
 paginate: 5
