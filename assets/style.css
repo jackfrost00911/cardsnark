@@ -1,0 +1,24 @@
+---
+---
+
+/* -------------------------------------------------------------------------
+   CARDSNARK STYLESHEET
+   -------------------------------------------------------------------------
+   NOTE: We are using Tailwind CSS for 99% of the design.
+   This file is intentionally empty to prevent conflicts with the Tailwind engine.
+   
+   Do not import 'minima' or old styles here.
+   -------------------------------------------------------------------------
+*/
+
+/* Smooth Scrolling is handled in head.html, but we can enforce it here too */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Selection Color (Just for fun - matches your Neon theme) */
+::selection {
+  background: #00f3ff; /* Neon Blue */
+  color: #000;
+}
+
