@@ -1,0 +1,174 @@
+---
+layout: default
+title: CardSnark - Honest Credit Card Reviews
+description: No corporate fluff. Just the raw truth about credit cards, points, and how to beat the banks at their own game.
+---
+
+<!-- 1. HERO SECTION -->
+<div class="relative bg-gradient-to-br from-snark-blue to-snark-dark text-white pt-20 pb-24 rounded-b-[3rem] shadow-xl overflow-hidden">
+    
+    <!-- Background Texture (Optional subtle pattern) -->
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+        <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+        </svg>
+    </div>
+
+    <div class="relative max-w-5xl mx-auto px-4 text-center z-10">
+        <h1 class="text-5xl md:text-7xl font-serif font-black tracking-tight mb-6 leading-tight">
+            Stop Being a <br class="hidden md:block" />
+            <span class="text-blue-300">Sucker.</span>
+        </h1>
+        <p class="text-lg md:text-2xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+            Most credit card sites are run by banks. <strong class="text-white font-bold">We aren't.</strong> We tell you the truth about which cards are trash and which ones actually pay you.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/reviews/" class="inline-block bg-white text-snark-blue font-bold text-lg px-8 py-4 rounded-xl shadow-lg hover:bg-gray-50 hover:scale-105 transition transform">
+                Read Reviews
+            </a>
+            <a href="/best-cards/" class="inline-block bg-transparent border-2 border-white text-white font-bold text-lg px-8 py-4 rounded-xl hover:bg-white/10 hover:scale-105 transition transform">
+                Best Cards 2025
+            </a>
+        </div>
+        
+        <!-- Trust Indicators -->
+        <div class="mt-12 pt-8 border-t border-white/10 flex flex-wrap justify-center gap-6 text-sm font-medium text-blue-200/80 uppercase tracking-widest">
+            <span>✓ No Sponsored Rankings</span>
+            <span>✓ Unfiltered Opinions</span>
+            <span>✓ 100% Independent</span>
+        </div>
+    </div>
+</div>
+
+<!-- 2. THE "BADASS" EBOOK SECTION (Breakout) -->
+<div class="max-w-6xl mx-auto px-4 -mt-12 relative z-20 mb-24">
+    <div class="bg-gray-900 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden flex flex-col md:flex-row">
+        
+        <!-- Text Side -->
+        <div class="p-8 md:p-12 md:w-3/5 flex flex-col justify-center order-2 md:order-1">
+            <div class="inline-block self-start bg-red-600 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded mb-4">
+                Free Download
+            </div>
+            <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-4 leading-tight">
+                The Banks Hate This Ebook. <br/><span class="text-blue-400">Get It Anyway.</span>
+            </h2>
+            <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                Learn the 5 legal hacks to spike your credit score by 50+ points in 30 days. No "pay on time" fluff. Just raw algorithm exploits.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 items-start">
+                <a href="/landing-page.html" class="w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-500 text-white font-bold px-8 py-4 rounded-lg shadow-lg shadow-blue-900/50 transition transform hover:-translate-y-1">
+                    DOWNLOAD CHEAT CODES &rarr;
+                </a>
+            </div>
+            <p class="text-gray-600 text-xs mt-4">Warning: Includes the controversial "Pay-for-Delete" script.</p>
+        </div>
+
+        <!-- Visual Side (3D CSS Book) -->
+        <div class="bg-gray-800 md:w-2/5 flex items-center justify-center p-12 relative overflow-hidden order-1 md:order-2">
+            <!-- Glow Effect -->
+            <div class="absolute w-48 h-48 bg-blue-500 rounded-full blur-[80px] opacity-20"></div>
+            
+            <!-- The CSS Book -->
+            <div class="relative w-40 h-56 bg-slate-900 border-2 border-blue-500 rounded-r-md shadow-2xl flex flex-col items-center justify-center text-center p-4 transform rotate-y-12 rotate-x-6 hover:rotate-0 transition duration-500 cursor-pointer group">
+                <div class="absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-gray-800 to-gray-600 border-r border-gray-900"></div>
+                <h3 class="font-black text-2xl text-white uppercase leading-none mb-2 group-hover:scale-110 transition">
+                    The<br/><span class="text-blue-500">Credit<br/>Spike</span>
+                </h3>
+                <span class="text-[0.6rem] text-gray-400 uppercase tracking-[2px]">Internal Playbook</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 3. LATEST REVIEWS GRID (Dynamic) -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+    <div class="flex justify-between items-end mb-10 border-b border-gray-100 pb-4">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-900">Latest Takedowns</h2>
+            <p class="text-gray-500 mt-2">Fresh roasts served daily.</p>
+        </div>
+        <a href="/reviews/" class="hidden md:inline-block text-snark-blue font-bold hover:underline">View All &rarr;</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Loop through the 3 most recent posts -->
+        {% for post in site.posts limit:3 %}
+        <article class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl transition duration-300 flex flex-col h-full overflow-hidden group">
+            
+            <!-- Image / Fallback -->
+            <a href="{{ post.url | relative_url }}" class="block h-48 bg-gray-100 overflow-hidden relative">
+                {% if post.image %}
+                    <img src="{{ post.image | relative_url }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center bg-snark-blue text-white/20 font-black text-4xl">
+                        SNARK
+                    </div>
+                {% endif %}
+                
+                <!-- Category Tag -->
+                {% if post.categories.size > 0 %}
+                <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-snark-dark text-xs font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide">
+                    {{ post.categories[0] }}
+                </span>
+                {% endif %}
+            </a>
+
+            <!-- Content -->
+            <div class="p-6 flex flex-col flex-grow">
+                <h3 class="text-xl font-bold text-gray-900 mb-3 leading-snug group-hover:text-snark-blue transition">
+                    <a href="{{ post.url | relative_url }}">
+                        {{ post.title }}
+                    </a>
+                </h3>
+                
+                <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                    {{ post.description | default: post.excerpt | strip_html | truncate: 120 }}
+                </p>
+
+                <div class="flex items-center justify-between pt-4 border-t border-gray-50 mt-auto">
+                    <span class="text-xs text-gray-400 font-medium">
+                        {{ post.date | date: "%b %d, %Y" }}
+                    </span>
+                    
+                    {% if post.rating %}
+                    <span class="flex items-center text-green-600 font-bold text-sm">
+                        ★ {{ post.rating }}/5
+                    </span>
+                    {% else %}
+                    <span class="text-snark-blue font-bold text-sm hover:underline">
+                        Read Review &rarr;
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+
+    <!-- Mobile "View All" Button -->
+    <div class="mt-8 text-center md:hidden">
+        <a href="/reviews/" class="inline-block w-full bg-gray-100 text-gray-700 font-bold py-3 rounded-lg hover:bg-gray-200 transition">
+            View All Reviews
+        </a>
+    </div>
+</div>
+
+<!-- 4. COMPARISON CTA STRIP -->
+<div class="bg-blue-50 border-y border-blue-100 py-16 mb-20">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <h2 class="text-2xl md:text-3xl font-serif font-bold text-snark-dark mb-4">
+            Confused? Use the Tool.
+        </h2>
+        <p class="text-gray-600 mb-8 max-w-lg mx-auto">
+            Don't guess. Our Card Finder Tool scans 50+ cards to find the one that actually fits your spending habits.
+        </p>
+        <a href="/tools/finder-tool/" class="inline-flex items-center justify-center bg-white border border-gray-200 text-snark-blue font-bold px-8 py-4 rounded-full shadow-md hover:shadow-lg hover:-translate-y-1 transition transform">
+            <span class="mr-2">🔍</span> Launch Card Finder
+        </a>
+    </div>
+</div>
+
+
+          
