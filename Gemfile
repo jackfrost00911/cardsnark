@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
 # Core Jekyll
-gem "jekyll", "~> 4.3.4"
+gem "github-pages", group: :jekyll_plugins
+
 
 # ----------------------------------------------------
 # SEO & TRAFFIC DOMINANCE PLUGINS
