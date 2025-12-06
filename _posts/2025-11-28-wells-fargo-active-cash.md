@@ -1,7 +1,7 @@
 ---
 layout: post
 categories: [reviews]
-title: "Wells Fargo Active Cash® Review 2025: The "No Brainer" Card"
+title: "Wells Fargo Active Cash® Review 2025: The 'No Brainer' Card"
 description: "Wells Fargo Active Cash review 2025: 2% cash back on everything with a $200 bonus. Is it better than the Citi Double Cash?"
 ---
 
