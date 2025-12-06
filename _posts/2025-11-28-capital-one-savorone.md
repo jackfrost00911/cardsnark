@@ -1,8 +1,8 @@
 ---
 layout: post
 categories: [reviews]
-title: "Capital One SavorOne Review 2025: The Ultimate "Night Out" Card"
-description: "Capital One SavorOne review 2025: 3% on dining, groceries, and entertainment with $0 annual fee. The best card for your social life?"
+title: "Capital One SavorOne Review 2025 The Ultimate 'Night Out' Card"
+description: "Capital One SavorOne review 2025 3% on dining, groceries, and entertainment with $0 annual fee. The best card for your social life?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">
