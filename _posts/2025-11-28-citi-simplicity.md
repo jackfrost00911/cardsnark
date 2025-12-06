@@ -1,8 +1,8 @@
 ---
 layout: post
 categories: [reviews]
-title: "Citi Simplicity® Review 2025: The "Get Out of Debt" Card"
-description: "Citi Simplicity review 2025: No late fees, no penalty APR, and 21 months of 0% interest. The best card for getting out of debt?"
+title: "Citi Simplicity® Review 2025 The 'Get Out of Debt' Card"
+description: "Citi Simplicity review 2025 No late fees, no penalty APR, and 21 months of 0% interest. The best card for getting out of debt?"
 ---
 
 <div class="section-container" style="padding-bottom: 2rem;">
