@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- 1. HEAD (Loads Tailwind, Fonts, SEO Tags) -->
+{% include head.html %}
+
+<!-- 2. BODY STRUCTURE -->
+<!-- 
+    bg-gray-50: Sets a professional off-white background.
+    flex-col min-h-screen: Forces the footer to the bottom.
+-->
+<body class="bg-gray-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen selection:bg-cyan-300 selection:text-black">
+
+    <!-- 3. NAVIGATION HEADER -->
+    {% include header.html %}
+
+    <!-- 4. MAIN CONTENT WRAPPER -->
+    <!-- flex-grow ensures this section expands to fill space -->
+    <main class="flex-grow pt-16">
+        {{ content }}
+    </main>
+
+    <!-- 5. FOOTER -->
+    {% include footer.html %}
+
+</body>
+</html>
+
+
