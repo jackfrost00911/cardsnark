@@ -360,7 +360,7 @@ description: Simulate how your credit score changes if you pay off debt, open a 
         if (newScore > 850) newScore = 850;
         if (newScore < 300) newScore = 300;
 
-        updateDashboard(score, newScore, nnewBalance, newLimit, historyStatus, inquiryStatus, commentary);
+        updateDashboard(score, newScore, newBalance, newLimit, historyStatus, inquiryStatus, commentary);
     }
 
     function updateDashboard(oldS, newS, newBal, newLim, hist, inq, comm) {
