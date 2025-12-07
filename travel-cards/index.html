@@ -1,0 +1,57 @@
+---
+layout: default
+title: Best Travel Credit Cards 2025 - Fly for Free
+description: Stop paying for flights. Compare the best travel rewards cards from Chase, Amex, and Capital One.
+---
+
+<div class="hero-wrapper">
+    <div class="hero-content">
+        <span class="hero-badge" style="background: #eff6ff; color: #1e40af;">TRAVEL REWARDS</span>
+        <h1 class="hero-title">Stop Paying Full Price<br>For Flights</h1>
+        <p class="hero-sub">The airlines are ripping you off. These cards help you fight back with miles, points, and free lounge access.</p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="section-header mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">Our Top Travel Picks</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {% for post in site.posts %}
+            {% if post.categories contains 'Travel' or post.title contains 'Travel' or post.title contains 'Sapphire' or post.title contains 'Venture' or post.title contains 'Platinum' %}
+                {% include card-preview.html %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="prose max-w-none text-gray-700">
+        <h2>How to Choose a Travel Card (Without a Spreadsheet)</h2>
+        <p>Travel credit cards are complicated on purpose. They want you to get distracted by "3X Points" and forget about the $500 annual fee. Here is the simple math to decide which tier you belong in.</p>
+
+        <h3>Tier 1: The "Once a Year" Traveler ($0 - $95 Fee)</h3>
+        <p>If you only fly home for Christmas and maybe take one vacation, do not get a luxury card. You won't use the perks.</p>
+        <ul>
+            <li><strong>Look for:</strong> Low annual fees and points that don't expire.</li>
+            <li><strong>Avoid:</strong> Cards with "Statement Credits" that require you to buy things you don't need.</li>
+            <li><strong>Best Pick:</strong> Chase Sapphire Preferred.</li>
+        </ul>
+
+        <h3>Tier 2: The "Digital Nomad" / Business Traveler ($250+ Fee)</h3>
+        <p>If you are in an airport more than 5 times a year, lounge access becomes a mental health necessity, not a luxury.</p>
+        <ul>
+            <li><strong>Look for:</strong> Priority Pass Select (Lounge access) and TSA PreCheck credits.</li>
+            <li><strong>Best Pick:</strong> Capital One Venture X (It effectively pays you to keep it).</li>
+        </ul>
+
+        <h3>The "Golden Rule" of Travel Points</h3>
+        <p>Never redeem points for cash back on Amazon. That is how the banks win. 60,000 Chase points are worth $600 on Amazon, but they can be worth $1,200 if you transfer them to Hyatt or United Airlines.</p>
+        
+        <div style="background: #eff6ff; padding: 2rem; border-radius: 12px; margin-top: 3rem; text-align: center;">
+            <h3 style="margin-top: 0; font-weight: bold; color: #1e3a8a;">Still confused?</h3>
+            <p class="mb-4">Take our 30-second quiz and we'll just tell you what to get.</p>
+            <a href="/tools/finder-tool/" class="inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">Take the Quiz</a>
+        </div>
+    </div>
+</div>
