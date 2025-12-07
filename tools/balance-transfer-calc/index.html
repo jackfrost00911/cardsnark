@@ -1,0 +1,223 @@
+---
+layout: default
+title: Balance Transfer Calculator - Is It Worth It?
+description: Calculate exactly how much you save with a balance transfer card. Warning: We will tell you if it's a bad deal.
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Scoped Styles for Calculator */
+    .calc-box {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+        padding: 2rem;
+    }
+
+    .input-group label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: all 0.2s;
+        background: #f8fafc;
+    }
+
+    .input-group input:focus {
+        background: white;
+        border-color: #4f46e5;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .result-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f1f5f9;
+        font-size: 0.95rem;
+        color: #334155;
+    }
+    .result-row:last-child { border-bottom: none; }
+
+    .snark-box {
+        background: #fffbeb;
+        border-left: 4px solid #f59e0b;
+        color: #92400e;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        font-style: italic;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+</style>
+
+<div class="bg-white min-h-screen pb-20">
+
+    <div class="bg-slate-900 text-white pt-20 pb-24 px-4 text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div class="max-w-3xl mx-auto relative z-10">
+            <span class="inline-block py-1 px-3 rounded-full bg-orange-500/20 border border-orange-500/50 text-orange-200 text-xs font-bold uppercase tracking-wider mb-6">Debt Killer</span>
+            <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">Stop The Bleeding.</h1>
+            <p class="text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                Paying 25% APR is financial suicide. Use this calculator to see if a balance transfer card can save you money (or if the fees are a trap).
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 -mt-16 relative z-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <div class="calc-box">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 border-b border-gray-100 pb-2">The Numbers</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="text-sm font-bold uppercase text-red-500 tracking-wider mb-3">Current Nightmare</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <label>Total Debt ($)</label>
+                                <input type="number" id="debt" placeholder="e.g. 5000">
+                            </div>
+                            <div class="input-group">
+                                <label>Current APR (%)</label>
+                                <input type="number" id="currentApr" placeholder="e.g. 24.99">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-bold uppercase text-green-600 tracking-wider mb-3">New Offer</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="input-group">
+                                <label>0% Duration (Months)</label>
+                                <input type="number" id="months" placeholder="e.g. 18">
+                            </div>
+                            <div class="input-group">
+                                <label>Transfer Fee (%)</label>
+                                <input type="number" id="fee" value="3" placeholder="Usually 3 or 5">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateSnark()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-lg shadow-lg transition transform active:scale-95 text-lg">
+                        Crunch The Numbers
+                    </button>
+                </div>
+            </div>
+
+            <div class="calc-box bg-slate-50 border-slate-200 hidden" id="results">
+                <h3 class="text-xl font-bold text-slate-900 mb-4">The Verdict</h3>
+                
+                <div id="snarkComment" class="snark-box"></div>
+
+                <div class="bg-white p-4 rounded-lg border border-slate-200 mb-6 shadow-sm">
+                    <div class="result-row">
+                        <span>Upfront Fee Cost</span>
+                        <span id="feeCost" class="font-bold text-red-500">$0.00</span>
+                    </div>
+                    <div class="result-row">
+                        <span>Old Interest Cost</span>
+                        <span id="oldInterest" class="font-bold text-slate-500">$0.00</span>
+                    </div>
+                    <div class="result-row pt-3 mt-2 border-t border-slate-100">
+                        <span class="font-bold text-slate-900">Total Savings</span>
+                        <span id="totalSavings" class="font-black text-2xl text-green-600">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 text-center">
+                    <p class="text-xs font-bold text-blue-800 uppercase mb-1">Debt-Free Monthly Payment</p>
+                    <p id="monthlyPay" class="text-3xl font-black text-blue-600">$0.00</p>
+                    <p class="text-xs text-blue-400 mt-1">Pay this amount to hit $0 by month <span id="monthText"></span></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="text-center mt-12 text-slate-400 text-sm max-w-2xl mx-auto px-4">
+        *This calculator assumes you pay off the balance within the promo period. If you miss a payment, the bank will revoke your 0% rate and you will cry. Don't miss a payment.
+    </div>
+
+</div>
+
+<script>
+    function calculateSnark() {
+        const debt = parseFloat(document.getElementById('debt').value) || 0;
+        const currentApr = parseFloat(document.getElementById('currentApr').value) || 0;
+        const months = parseFloat(document.getElementById('months').value) || 0;
+        const feePercent = parseFloat(document.getElementById('fee').value) || 0;
+
+        if (debt === 0 || months === 0) {
+            alert("We need actual numbers to work with here.");
+            return;
+        }
+
+        // Logic
+        const transferFeeCost = debt * (feePercent / 100);
+        const newTotalDebt = debt + transferFeeCost;
+        const monthlyPayment = newTotalDebt / months;
+
+        // Approx old interest (Simple Amortization Estimate)
+        let oldBalance = debt;
+        let totalInterestOld = 0;
+        let monthlyRate = (currentApr / 100) / 12;
+
+        for (let i = 0; i < months; i++) {
+            let interest = oldBalance * monthlyRate;
+            totalInterestOld += interest;
+            let principal = monthlyPayment - interest; // Assume same monthly payment for fair comparison
+            oldBalance -= principal;
+            if (oldBalance < 0) oldBalance = 0;
+        }
+
+        const savings = totalInterestOld - transferFeeCost;
+
+        // Update UI
+        document.getElementById('feeCost').innerText = "$" + transferFeeCost.toFixed(2);
+        document.getElementById('oldInterest').innerText = "$" + totalInterestOld.toFixed(2);
+        
+        const saveEl = document.getElementById('totalSavings');
+        saveEl.innerText = "$" + savings.toFixed(2);
+        
+        document.getElementById('monthlyPay').innerText = "$" + monthlyPayment.toFixed(2);
+        document.getElementById('monthText').innerText = months;
+
+        // Snark Logic
+        const snarkBox = document.getElementById('snarkComment');
+        let snark = "";
+
+        if (savings < 0) {
+            snark = "🛑 STOP. ABORT. You are losing money. The transfer fee costs more than the interest you'd save. Do NOT do this.";
+            saveEl.className = "font-black text-2xl text-red-600";
+        } else if (savings < 100) {
+            snark = "You're saving like $50 bucks. Better than a kick in the teeth, but is it worth the credit inquiry? Barely.";
+            saveEl.className = "font-black text-2xl text-yellow-600";
+        } else if (savings > 1000) {
+            snark = "🔥 Okay, look at you beating the system! That's over a grand you're keeping away from the banks. Treat yourself. Actually don't, you're in debt.";
+            saveEl.className = "font-black text-2xl text-green-600";
+        } else {
+            snark = "Solid move. You're saving a decent chunk. Just make sure you actually pay it off before the 0% ends.";
+            saveEl.className = "font-black text-2xl text-green-600";
+        }
+
+        snarkBox.innerText = snark;
+        
+        // Show Results
+        const res = document.getElementById('results');
+        res.classList.remove('hidden');
+    }
+                  </script>
+                  
