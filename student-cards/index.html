@@ -1,0 +1,59 @@
+---
+layout: default
+title: Best Student Credit Cards 2025 - Build Credit While Broke
+description: Stop using a debit card. These student cards from Discover, Capital One, and Chase build credit and earn cash back on pizza and textbooks.
+---
+
+<div class="hero-wrapper">
+    <div class="hero-content">
+        <span class="hero-badge" style="background: #e0f2fe; color: #0284c7;">ADULTING 101</span>
+        <h1 class="hero-title">Build Credit While<br>Surviving on Ramen</h1>
+        <p class="hero-sub">You have zero income and questionable spending habits. Luckily, banks want you anyway. These cards are the only ones worth applying for.</p>
+    </div>
+</div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <div style="background: #f0f9ff; padding: 2rem; border-radius: 16px; border: 1px solid #bae6fd; margin-bottom: 3rem;">
+        <h3 style="margin-top: 0; color: #0c4a6e; font-weight: bold;">The 30-Second Summary</h3>
+        <ul style="margin-bottom: 0; padding-left: 1.5rem; display: grid; gap: 0.5rem;">
+            <li>🏆 <strong>Best Overall:</strong> <span class="text-blue-600 font-bold">Discover it® Student</span> (Double rewards year 1)</li>
+            <li>🍔 <strong>Best for Foodies:</strong> <span class="text-blue-600 font-bold">Capital One Savor Student</span> (3% Dining & Groceries)</li>
+            <li>🚀 <strong>Best "First" Card:</strong> <span class="text-blue-600 font-bold">Chase Freedom Rise℠</span> (No credit history needed)</li>
+            <li>🤯 <strong>Highest Earning:</strong> <span class="text-blue-600 font-bold">Bank of America® Student</span> (6% Category Offer)</li>
+        </ul>
+    </div>
+
+    <div class="section-header mb-8">
+        <h2 class="text-3xl font-bold text-gray-900">The Honor Roll</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {% for post in site.posts %}
+            {% if post.categories contains 'Student' or post.title contains 'Student' or post.title contains 'Rise' %}
+                {% include card-preview.html %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="prose max-w-none text-gray-700">
+        <h2>How to Not Ruin Your Life by Age 22</h2>
+        <p>Banks are not giving you these cards because they like you. They are giving them to you because they hope you'll mess up, carry a balance, and pay them 29% interest for the next decade.</p>
+        
+        <h3>The "Don't Be An Idiot" Checklist</h3>
+        <ul>
+            <li><strong>Rule #1:</strong> Never spend money you don't currently have in your checking account. Credit cards are for <em>spending</em> money, not <em>borrowing</em> money.</li>
+            <li><strong>Rule #2:</strong> Set up Auto-Pay for the "Statement Balance." Not the "Minimum Payment." The minimum payment is a trap designed to keep you in debt forever.</li>
+            <li><strong>Rule #3:</strong> Keep your utilization low. If your limit is $1,000, try not to have a balance higher than $300 when the statement closes. It helps your score grow faster.</li>
+        </ul>
+
+        <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 1.5rem; margin: 2rem 0; border-radius: 8px;">
+            <h3 style="margin-top: 0; color: #991b1b; font-weight: bold;">⚠️ Campus Scams</h3>
+            <p style="margin-bottom: 0; color: #7f1d1d;">Avoid any credit card table set up on your campus quad giving away free t-shirts or pizza. Those are usually predatory cards with terrible terms. Apply online for the cards listed above instead.</p>
+        </div>
+
+        <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 1.5rem; margin-top: 3rem; border-radius: 8px; font-size: 0.9rem; text-align: center;">
+            <p style="margin: 0; color: #92400e;"><strong>Advertiser Disclosure:</strong> CardSnark is an independent website. We receive compensation when you apply through our links. This does not influence our editorial opinions.</p>
+        </div>
+    </div>
+</div>
