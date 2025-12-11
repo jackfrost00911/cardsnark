@@ -3,7 +3,7 @@ layout: review
 title: "U.S. Bank Altitude® Go Visa Signature® Card"
 description: "US Bank Altitude Go review 2025: 4x points on dining (now capped) with $0 annual fee. Is this still the best no-fee dining card?"
 categories: [Reviews, US Bank, Dining]
-image: assets/images/us-bank-altitude-go.png
+image: images/us-bank-altitude-go.png
 rating: 4.8
 verdict: "The U.S. Bank Altitude Go is the best-kept secret in credit cards. While everyone else screams about the Amex Gold ($325 fee), this card earns 4x points on dining with a $0 annual fee. However, as of April 2025, that 4x rate is now capped at $2,000 spent per quarter. It’s still a beast for most people, but big spenders should beware."
 annual_fee: "$0"
