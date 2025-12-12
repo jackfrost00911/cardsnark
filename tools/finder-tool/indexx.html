@@ -1,0 +1,406 @@
+---
+layout: tool
+title: "CardSnark Matchmaker"
+description: "Stop guessing. Answer 5 quick questions and our algorithm will find the mathematically correct credit card for your wallet."
+permalink: /tools/card-matchmaker/
+---
+
+<style>
+    /* Custom Radio Inputs */
+    .snark-radio:checked + div {
+        background-color: #f8fafc;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 2px #e0e7ff;
+    }
+    .snark-radio:checked + div .icon-main { color: #4f46e5; }
+    
+    .tool-card { transition: all 0.2s ease-in-out; cursor: pointer; }
+    .tool-card:hover { transform: translateY(-2px); border-color: #94a3b8; }
+
+    /* Results Animation */
+    .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* Card Art Gradients */
+    .gradient-blue { background: linear-gradient(135deg, #1e3a8a, #172554); }
+    .gradient-gold { background: linear-gradient(135deg, #fcd34d, #d97706); }
+    .gradient-plat { background: linear-gradient(135deg, #e5e7eb, #9ca3af); }
+    .gradient-green { background: linear-gradient(135deg, #0f766e, #115e59); }
+    .gradient-dark { background: linear-gradient(135deg, #0f172a, #334155); }
+    .gradient-orange { background: linear-gradient(135deg, #f97316, #c2410c); }
+</style>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    
+    <div class="mb-8">
+        <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div class="h-full bg-indigo-600 w-1/5 transition-all duration-500 ease-out" id="progress-bar"></div>
+        </div>
+        <p class="text-right text-xs font-bold text-gray-400 mt-2" id="step-counter">Step 1 of 5</p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-lg border border-gray-200 overflow-hidden" id="quiz-container">
+        <div class="p-6 md:p-10 space-y-12">
+            
+            <section class="step-section">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm mr-3 font-mono">1</span>
+                    What's your credit score look like?
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <label>
+                        <input type="radio" name="score" value="excellent" class="snark-radio hidden" checked onchange="updateProgress(1)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-5 text-center h-full bg-white relative">
+                            <div class="font-bold text-slate-900">Excellent</div>
+                            <div class="text-xs text-slate-500 mt-1 font-mono">750+</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="score" value="good" class="snark-radio hidden" onchange="updateProgress(1)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-5 text-center h-full bg-white relative">
+                            <div class="font-bold text-slate-900">Good</div>
+                            <div class="text-xs text-slate-500 mt-1 font-mono">700-749</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="score" value="fair" class="snark-radio hidden" onchange="updateProgress(1)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-5 text-center h-full bg-white relative">
+                            <div class="font-bold text-slate-900">Fair</div>
+                            <div class="text-xs text-slate-500 mt-1 font-mono">640-699</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="score" value="bad" class="snark-radio hidden" onchange="updateProgress(1)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-5 text-center h-full bg-white relative">
+                            <div class="font-bold text-slate-900">Needs Work</div>
+                            <div class="text-xs text-slate-500 mt-1 font-mono">&lt; 640</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <section class="step-section border-t border-gray-100 pt-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm mr-3 font-mono">2</span>
+                    Personal or Business?
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label>
+                        <input type="radio" name="usage" value="personal" class="snark-radio hidden" checked onchange="updateProgress(2)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 flex items-center gap-4 bg-white">
+                            <div>
+                                <div class="font-bold text-slate-900">Personal</div>
+                                <div class="text-xs text-slate-500">For my own bad decisions</div>
+                            </div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="usage" value="business" class="snark-radio hidden" onchange="updateProgress(2)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 flex items-center gap-4 bg-white">
+                            <div>
+                                <div class="font-bold text-slate-900">Business</div>
+                                <div class="text-xs text-slate-500">LLC, Freelance, Side Hustle</div>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <section class="step-section border-t border-gray-100 pt-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm mr-3 font-mono">3</span>
+                    What's the main mission?
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label>
+                        <input type="radio" name="goal" value="rewards" class="snark-radio hidden" checked onchange="updateProgress(3)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">Max Rewards</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="goal" value="bt" class="snark-radio hidden" onchange="updateProgress(3)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">Kill Debt (0% APR)</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="goal" value="cashback" class="snark-radio hidden" onchange="updateProgress(3)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">Simple Cash Back</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <section class="step-section border-t border-gray-100 pt-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm mr-3 font-mono">4</span>
+                    Where does your money go?
+                </h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <label>
+                        <input type="radio" name="spend" value="dining" class="snark-radio hidden" checked onchange="updateProgress(4)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-sm">Dining</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="spend" value="travel" class="snark-radio hidden" onchange="updateProgress(4)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-sm">Travel</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="spend" value="grocery" class="snark-radio hidden" onchange="updateProgress(4)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-sm">Groceries</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="spend" value="general" class="snark-radio hidden" onchange="updateProgress(4)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-sm">Everything</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <section class="step-section border-t border-gray-100 pt-8">
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center">
+                    <span class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-sm mr-3 font-mono">5</span>
+                    Annual Fee Tolerance
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <label>
+                        <input type="radio" name="fee" value="0" class="snark-radio hidden" checked onchange="updateProgress(5)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">$0 Only</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="fee" value="95" class="snark-radio hidden" onchange="updateProgress(5)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">Moderate ($95ish)</div>
+                        </div>
+                    </label>
+                    <label>
+                        <input type="radio" name="fee" value="695" class="snark-radio hidden" onchange="updateProgress(5)">
+                        <div class="tool-card border-2 border-gray-100 rounded-2xl p-4 text-center bg-white">
+                            <div class="font-bold text-slate-900">High Roller</div>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            <div class="pt-6">
+                <button onclick="findMatch()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xl py-5 rounded-2xl shadow-xl shadow-slate-200 transition transform active:scale-[0.98] flex items-center justify-center">
+                    Reveal My Match <i class="fa-solid fa-arrow-right ml-3"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="results-area" class="max-w-4xl mx-auto mt-16 hidden">
+        <div id="loading" class="text-center py-12">
+            <div class="inline-block w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <h3 class="text-xl font-bold text-slate-900">Running the Algorithm...</h3>
+            <p class="text-slate-500">Filtering out the sub-par cards.</p>
+        </div>
+        
+        <div id="cards-container" class="space-y-8 hidden">
+            </div>
+
+        <div class="text-center mt-16 border-t border-gray-200 pt-8">
+            <button onclick="window.location.reload()" class="text-indigo-600 font-bold hover:text-indigo-800 transition">
+                <i class="fa-solid fa-rotate-right mr-1"></i> Start Over
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function updateProgress(step) {
+        const percent = (step / 5) * 100;
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('step-counter').innerText = 'Step ' + step + ' of 5';
+    }
+
+    // --- CARD DATABASE ---
+    // Expanded data to ensure the tool actually works
+    const cards = [
+        // CHASE
+        { 
+            id: 'csr', 
+            name: "Chase Sapphire Reserve®", 
+            type: "personal", 
+            scores: ["excellent"], 
+            goal: ["rewards", "travel"], 
+            cats: ["travel", "dining"], 
+            fee: 695, 
+            gradient: "gradient-blue", 
+            desc: "The heavy hitter. High fee, but the $300 travel credit makes it worth it.", 
+            perks: ["10x Hotels & Car Rentals", "Airport Lounge Access", "$300 Annual Travel Credit"], 
+            link: "#" 
+        },
+        { 
+            id: 'csp', 
+            name: "Chase Sapphire Preferred®", 
+            type: "personal", 
+            scores: ["excellent", "good"], 
+            goal: ["rewards", "travel"], 
+            cats: ["dining", "travel", "general"], 
+            fee: 95, 
+            gradient: "gradient-blue", 
+            desc: "The undisputed champion of starter travel cards. Transfer points 1:1 to airlines.", 
+            perks: ["3x on Dining", "2x on Travel", "1:1 Point Transfer"], 
+            link: "#" 
+        },
+        { 
+            id: 'cff', 
+            name: "Chase Freedom Flex℠", 
+            type: "personal", 
+            scores: ["excellent", "good", "fair"], 
+            goal: ["cashback", "bt"], 
+            cats: ["grocery", "dining", "general"], 
+            fee: 0, 
+            gradient: "gradient-blue", 
+            desc: "The rotating category king. Earn 5% on different things every quarter.", 
+            perks: ["5% Rotating Categories", "3x Dining & Drugstores", "0% Intro APR Offer"], 
+            link: "#" 
+        },
+        
+        // AMEX
+        { 
+            id: 'amex_gold', 
+            name: "American Express® Gold Card", 
+            type: "personal", 
+            scores: ["excellent", "good"], 
+            goal: ["rewards"], 
+            cats: ["dining", "grocery"], 
+            fee: 250, 
+            gradient: "gradient-gold", 
+            desc: "If you eat food, you need this card. The 4x earning rate on dining is legendary.", 
+            perks: ["4x Dining & Grocery", "$120 Dining Credit", "$120 Uber Cash"], 
+            link: "#" 
+        },
+        { 
+            id: 'amex_plat', 
+            name: "The Platinum Card®", 
+            type: "personal", 
+            scores: ["excellent"], 
+            goal: ["rewards", "travel"], 
+            cats: ["travel"], 
+            fee: 695, 
+            gradient: "gradient-plat", 
+            desc: "The status symbol. It's expensive, but the lounge access is unmatched.", 
+            perks: ["5x Flights", "Global Lounge Collection", "$200 Hotel Credit"], 
+            link: "#" 
+        },
+        { 
+            id: 'bce', 
+            name: "Blue Cash Everyday®", 
+            type: "personal", 
+            scores: ["good", "fair"], 
+            goal: ["cashback"], 
+            cats: ["grocery", "gas"], 
+            fee: 0, 
+            gradient: "gradient-blue", 
+            desc: "Simple, effective cash back for families who drive and eat.", 
+            perks: ["3x Groceries", "3x Gas", "3x Online Retail"], 
+            link: "#" 
+        },
+
+        // CAPITAL ONE
+        { 
+            id: 'vx', 
+            name: "Capital One Venture X", 
+            type: "personal", 
+            scores: ["excellent"], 
+            goal: ["rewards", "travel"], 
+            cats: ["general", "travel"], 
+            fee: 395, 
+            gradient: "gradient-dark", 
+            desc: "The card that pays for itself. The annual credits outweigh the fee.", 
+            perks: ["2x on Everything", "10,000 Mile Anniversary Bonus", "Lounge Access"], 
+            link: "#" 
+        },
+        { 
+            id: 'savor', 
+            name: "Capital One SavorOne", 
+            type: "personal", 
+            scores: ["good", "fair"], 
+            goal: ["cashback", "dining"], 
+            cats: ["dining", "grocery"], 
+            fee: 0, 
+            gradient: "gradient-orange", 
+            desc: "The ultimate 'night out' card. 3% on dining and entertainment.", 
+            perks: ["3% Dining", "3% Entertainment", "3% Grocery"], 
+            link: "#" 
+        },
+
+        // SECURED / BAD CREDIT
+        { 
+            id: 'disco_sec', 
+            name: "Discover it® Secured", 
+            type: "personal", 
+            scores: ["bad", "fair"], 
+            goal: ["build"], 
+            cats: ["general"], 
+            fee: 0, 
+            gradient: "gradient-orange", 
+            desc: "The best card for rebuilding credit. It actually earns rewards.", 
+            perks: ["2% Gas & Dining", "Automatic Reviews for Upgrade", "No Credit Score Required"], 
+            link: "#" 
+        },
+
+        // BUSINESS
+        { 
+            id: 'ink_pref', 
+            name: "Ink Business Preferred®", 
+            type: "business", 
+            scores: ["excellent", "good"], 
+            goal: ["rewards", "travel"], 
+            cats: ["travel", "general"], 
+            fee: 95, 
+            gradient: "gradient-blue", 
+            desc: "The workhorse for business owners with travel or ad spend.", 
+            perks: ["3x on Travel/Ads", "Cell Phone Protection", "High Sign-up Bonus"], 
+            link: "#" 
+        }
+    ];
+
+    function findMatch() {
+        // 1. Get Inputs
+        const score = document.querySelector('input[name="score"]:checked')?.value || "good";
+        const type = document.querySelector('input[name="usage"]:checked')?.value || "personal";
+        const goal = document.querySelector('input[name="goal"]:checked')?.value || "rewards";
+        const spend = document.querySelector('input[name="spend"]:checked')?.value || "general";
+        const fee = parseInt(document.querySelector('input[name="fee"]:checked')?.value || "95");
+
+        // 2. Hide Quiz, Show Loader
+        document.getElementById('quiz-container').style.display = 'none';
+        const results = document.getElementById('results-area');
+        results.classList.remove('hidden');
+
+        // 3. Filter Logic
+        let matches = cards.filter(card => {
+            // Must match Type (Personal vs Business)
+            if (card.type !== type) return false;
+            
+            // Must match Score Requirement
+            if (!card.scores.includes(score) && score !== "excellent") return false;
+            
+            // Fee Logic: If user wants $0, strict filter. If user accepts fees, show everything under their limit.
+            if (fee === 0 && card.fee > 0) return false;
+            if (fee === 95 && card.fee > 95) return false;
+
+            return true;
+        });
+
+        // 4. Scoring / Sorting
+        matches = matches.map(card => {
+            let points = 0;
+            // Boost if category matches
+            if (card.cats.i
