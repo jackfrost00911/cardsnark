@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include google-analytics.html %}
+</head>
+<body>
+
+<style>
+    .post-content h2 { font-family: 'Merriweather', serif; font-size: 1.75rem; font-weight: 700; color: #111827; margin-top: 2rem; margin-bottom: 1rem; }
+    .post-content h3 { font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .post-content p { font-family: 'Inter', sans-serif; margin-bottom: 1.25rem; line-height: 1.75; color: #374151; font-size: 1.125rem; }
+    .post-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+    .post-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+    .post-content li { margin-bottom: 0.5rem; }
+    .post-content a { color: #1a3b8e; text-decoration: underline; font-weight: 500; }
+    .post-content a:hover { color: #0f2458; }
+    .post-content blockquote { border-left: 4px solid #ffc107; padding-left: 1rem; font-style: italic; color: #4b5563; background: #f9fafb; padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; }
+    .post-content img { border-radius: 0.5rem; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+</style>
+
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="text-center mb-12 border-b border-gray-100 pb-12">
+    <h1 class="text-3xl md:text-5xl font-serif font-bold text-gray-900 leading-tight mb-6" itemprop="name headline">
+      {{ page.title | escape }}
+    </h1>
+    
+    <div class="flex justify-center items-center text-sm text-gray-500 uppercase tracking-wide font-semibold space-x-2">
+      <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {{ page.date | date: "%b %-d, %Y" }}
+      </time>
+      
+      {% if page.author %}
+        <span>•</span>
+        <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name" class="text-snark-blue">{{ page.author }}</span>
+        </span>
+      {% endif %}
+
+      <span>•</span>
+      <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
+        {% assign words = content | number_of_words %}
+        {% if words < 360 %}
+          1 min read
+        {% else %}
+          {{ words | divided_by:180 }} min read
+        {% endif %}
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content max-w-3xl mx-auto" itemprop="articleBody">
+    
+    <div class="bg-gray-50 border-l-4 border-gray-300 p-4 mb-8 text-sm text-gray-500 leading-relaxed italic">
+        <span class="font-bold text-gray-700 not-italic">Advertiser Disclosure:</span> 
+        CardSnark.cc is an independent, advertising-supported comparison service. The offers that appear on this site are from companies from which CardSnark.cc receives compensation. This compensation may impact how and where products appear on this site.
+    </div>
+    <div class="mb-8"></div>
+    
+    {{ content }}
+
+    <div class="mt-12 p-6 bg-blue-50 rounded-xl border border-blue-100 text-center">
+      <p class="font-bold text-snark-dark mb-4">Found this useful (or at least funny)? Share the snark:</p>
+      <div class="flex justify-center">
+          </div>
+    </div>
+
+    <div class="mt-12 p-8 bg-gray-50 rounded-2xl border border-gray-100 flex flex-col md:flex-row gap-6 items-center md:items-start text-center md:text-left">
+        <div class="w-16 h-16 rounded-full bg-blue-100 flex-shrink-0 flex items-center justify-center text-blue-600 text-2xl font-bold overflow-hidden">
+            {% if page.author_image %}
+                <img src="{{ page.author_image }}" alt="{{ page.author }}" class="w-full h-full object-cover mt-0 mb-0">
+            {% else %}
+                {{ page.author | slice: 0 | default: "C" }}
+            {% endif %}
+        </div>
+        <div>
+            <h4 class="text-lg font-bold text-gray-900">About {{ page.author | default: "The Editor" }}</h4>
+            <p class="text-gray-600 mt-2 text-sm leading-relaxed">
+                {{ page.author_bio | default: "We are a team of credit card enthusiasts dedicated to helping you maximize your rewards and travel for less. We dig through the fine print so you don't have to." }}
+            </p>
+        </div>
+    </div>
+
+  </div>
+
+  <div class="mt-20 pt-12 border-t border-gray-200">
+    <h3 class="text-2xl font-bold text-gray-900 mb-8 text-center">Since you read that, you might also tolerate these:</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% assign maxRelated = 3 %}
+      {% assign maxRelatedCounter = 0 %}
+      
+      {% for post in site.posts %}
+        {% unless post.url == page.url %}
+          {% assign match = false %}
+          {% for category in post.categories %}
+            {% if page.categories contains category %}
+              {% assign match = true %}
+            {% endif %}
+          {% endfor %}
+
+          {% if match %}
+            <a href="{{ post.url | relative_url }}" class="group block bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition transform hover:-translate-y-1">
+                {% if post.image %}
+                  <div class="h-48 bg-cover bg-center" style="background-image: url('{{ post.image | relative_url }}');"></div>
+                {% else %}
+                   <div class="h-48 bg-gray-800 flex items-center justify-center">
+                       <span class="text-gray-500 font-bold text-2xl">CardSnark</span>
+                   </div>
+                {% endif %}
+                <div class="p-6">
+                  <h4 class="text-lg font-bold text-gray-900 group-hover:text-snark-blue transition leading-tight mb-2">{{ post.title }}</h4>
+                  <small class="text-gray-500">{{ post.date | date: "%b %d, %Y" }}</small>
+                </div>
+            </a>
+            {% assign maxRelatedCounter = maxRelatedCounter | plus: 1 %}
+            {% if maxRelatedCounter >= maxRelated %}{% break %}{% endif %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+
+</article>
+
+{% if page.rating %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ page.product_name }}",
+  "image": "{{ site.url }}{{ page.image }}",
+  "description": "{{ page.description | strip_html | strip_newlines | truncate: 160 }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ page.brand }}"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "{{ page.rating }}",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "{{ page.author }}"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "price": "{{ page.annual_fee }}",
+    "availability": "https://schema.org/InStock",
+    "url": "{{ page.url | absolute_url }}"
+  }
+}
+</script>
+{% endif %}
+
+{% unless page.rating %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ page.title }}",
+  "image": "{{ site.url }}{{ page.image }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ page.author | default: site.title }}"
+  },
+  "description": "{{ page.description | strip_html | strip_newlines | truncate: 160 }}"
+}
+</script>
+{% endunless %}
+
+</body>
+  </html>
+  
