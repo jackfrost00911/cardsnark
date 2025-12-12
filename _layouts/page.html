@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include google-analytics.html %}
+</head>
+<body>
+
+<style>
+    .page-content h2 { font-family: 'Merriweather', serif; font-size: 1.75rem; font-weight: 700; color: #111827; margin-top: 2.5rem; margin-bottom: 1rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
+    .page-content h3 { font-family: 'Merriweather', serif; font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-top: 2rem; margin-bottom: 0.75rem; }
+    .page-content p { font-family: 'Inter', sans-serif; margin-bottom: 1.25rem; line-height: 1.75; color: #374151; font-size: 1.125rem; }
+    .page-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+    .page-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; color: #374151; }
+    .page-content li { margin-bottom: 0.5rem; }
+    .page-content a { color: #1a3b8e; text-decoration: underline; font-weight: 500; }
+    .page-content a:hover { color: #0f2458; }
+    .page-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; font-style: italic; color: #4b5563; background: #eff6ff; padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; }
+    
+    /* Table styling for Terms/Privacy pages if you use them */
+    .page-content table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .page-content th, .page-content td { border: 1px solid #e5e7eb; padding: 0.75rem; text-align: left; }
+    .page-content th { background-color: #f9fafb; font-weight: 600; }
+</style>
+
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12" itemscope itemtype="https://schema.org/WebPage">
+
+  <header class="text-center mb-12 border-b border-gray-100 pb-12">
+    <h1 class="text-3xl md:text-5xl font-serif font-bold text-gray-900 leading-tight mb-4" itemprop="headline">
+      {{ page.title | escape }}
+    </h1>
+    
+    {% if page.subtitle %}
+      <p class="text-xl text-gray-500 max-w-2xl mx-auto leading-relaxed mb-4">{{ page.subtitle }}</p>
+    {% endif %}
+
+    {% if page.last_modified_at or page.date %}
+      <div class="text-sm text-gray-400 uppercase tracking-wider font-semibold">
+        Last Updated: <time datetime="{{ page.last_modified_at | default: page.date | date_to_xmlschema }}">
+          {{ page.last_modified_at | default: page.date | date: "%B %d, %Y" }}
+        </time>
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="page-content max-w-3xl mx-auto" itemprop="mainContentOfPage">
+    {{ content }}
+  </div>
+
+  <div class="max-w-3xl mx-auto mt-16 pt-8 border-t border-gray-100">
+    <div class="bg-gray-50 rounded-xl p-6 text-center border border-gray-200">
+        <h4 class="font-bold text-gray-900 mb-2">Have questions about {{ page.title }}?</h4>
+        <p class="text-gray-600 text-sm mb-4">We are here to help clarify any details.</p>
+        <a href="mailto:contact@cardsnark.cc" class="inline-flex items-center text-blue-700 font-bold hover:text-blue-900 transition">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            Contact Support
+        </a>
+    </div>
+  </div>
+
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ page.title }}",
+  "description": "{{ page.description | strip_html | truncate: 160 }}",
+  "url": "{{ page.url | absolute_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.title }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.url }}/assets/images/logo.png"
+    }
+  },
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}"
+}
+</script>
+
+</body>
+                        </html>
+                        
