@@ -1,0 +1,252 @@
+---
+layout: tool
+title: "Balance Transfer Calculator"
+description: "Calculate exactly how much you save with a balance transfer card. Warning: We will tell you if the transfer fee makes it a bad deal."
+permalink: /tools/balance-transfer-calculator/
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Scoped Styles */
+    .calc-wrapper { font-family: 'Inter', sans-serif; color: #0f172a; }
+    
+    .pro-input-group label {
+        display: block; font-size: 0.75rem; font-weight: 700; 
+        text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.05em;
+    }
+    
+    .pro-input {
+        width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; 
+        background: #fff; font-weight: 600; color: #1e293b; transition: all 0.2s;
+    }
+    .pro-input:focus { border-color: #4f46e5; outline: none; ring: 2px solid #e0e7ff; }
+
+    .result-row {
+        display: flex; justify-content: space-between; padding: 0.75rem 0; 
+        border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; color: #334155;
+    }
+    .result-row:last-child { border-bottom: none; }
+
+    .snark-box {
+        border-left: 4px solid; padding: 1rem; border-radius: 0.5rem; 
+        font-style: italic; margin-bottom: 1.5rem; font-weight: 500;
+        background: #fff; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+    
+    .slide-up { animation: slideUp 0.4s ease-out forwards; opacity: 0; transform: translateY(20px); }
+    @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="calc-wrapper py-12 bg-slate-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            
+            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-gray-200 p-6 md:p-8">
+                <div class="flex items-center mb-6 pb-4 border-b border-gray-100">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 leading-tight">The Numbers</h3>
+                        <p class="text-xs text-slate-500">Input your current debt details</p>
+                    </div>
+                </div>
+                
+                <div class="space-y-8">
+                    <div class="bg-red-50 p-5 rounded-xl border border-red-100">
+                        <h4 class="text-xs font-bold uppercase text-red-600 tracking-wider mb-4 flex items-center">
+                            <i class="fa-solid fa-circle-exclamation mr-2"></i> Current Nightmare
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="pro-input-group">
+                                <label>Total Debt ($)</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-3 text-gray-400">$</span>
+                                    <input type="number" id="debt" class="pro-input pl-7" placeholder="5000">
+                                </div>
+                            </div>
+                            <div class="pro-input-group">
+                                <label>Current APR (%)</label>
+                                <div class="relative">
+                                    <input type="number" id="currentApr" class="pro-input pr-8" placeholder="24.99">
+                                    <span class="absolute right-3 top-3 text-gray-400">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-green-50 p-5 rounded-xl border border-green-100">
+                        <h4 class="text-xs font-bold uppercase text-green-700 tracking-wider mb-4 flex items-center">
+                            <i class="fa-solid fa-gift mr-2"></i> New Offer
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="pro-input-group">
+                                <label>0% Duration (Months)</label>
+                                <input type="number" id="months" class="pro-input" placeholder="18">
+                            </div>
+                            <div class="pro-input-group">
+                                <label>Transfer Fee (%)</label>
+                                <div class="relative">
+                                    <input type="number" id="fee" class="pro-input pr-8" value="3" placeholder="3">
+                                    <span class="absolute right-3 top-3 text-gray-400">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateSnark()" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg shadow-slate-300/50 transition transform active:scale-[0.98] text-lg flex items-center justify-center gap-2">
+                        Crunch The Numbers <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="hidden" id="results-area">
+                <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-gray-200 overflow-hidden slide-up">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-gray-200">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-gavel text-slate-400"></i> The Verdict
+                        </h3>
+                    </div>
+
+                    <div class="p-6 md:p-8">
+                        <div id="snarkComment" class="snark-box text-sm leading-relaxed"></div>
+
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 mb-8 shadow-sm">
+                            <div class="result-row">
+                                <span class="text-slate-500">Upfront Fee Cost</span>
+                                <span id="feeCost" class="font-bold text-red-500">$0.00</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="text-slate-500">Old Interest Cost</span>
+                                <span id="oldInterest" class="font-bold text-slate-500 line-through decoration-red-500">$0.00</span>
+                            </div>
+                            <div class="result-row pt-4 mt-2 border-t border-slate-100 items-center">
+                                <span class="font-bold text-slate-900">Net Savings</span>
+                                <span id="totalSavings" class="font-black text-3xl text-green-600">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100 text-center relative overflow-hidden">
+                            <div class="relative z-10">
+                                <p class="text-xs font-bold text-indigo-800 uppercase mb-2 tracking-wide">Debt-Free Monthly Payment</p>
+                                <p id="monthlyPay" class="text-4xl font-black text-indigo-600 mb-2">$0.00</p>
+                                <p class="text-xs text-indigo-400">Pay this exact amount to hit $0 by month <span id="monthText"></span>.</p>
+                            </div>
+                            <div class="absolute -bottom-6 -right-6 text-indigo-100 text-8xl opacity-50">
+                                <i class="fa-solid fa-calendar-check"></i>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+                            <p class="text-sm text-gray-500 mb-4">Ready to transfer?</p>
+                            <a href="/best-balance-transfer-cards" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition">
+                                See Best 0% Cards
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="empty-state" class="hidden lg:flex flex-col items-center justify-center h-full text-center p-12 text-slate-300 border-2 border-dashed border-slate-200 rounded-2xl">
+                <i class="fa-solid fa-chart-pie text-6xl mb-4"></i>
+                <p class="text-lg font-medium">Enter your details to see<br>if you'll save money.</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show empty state on load for desktop layout balance
+    if(window.innerWidth >= 1024) {
+        document.getElementById('empty-state').classList.remove('hidden');
+    }
+
+    function calculateSnark() {
+        const debt = parseFloat(document.getElementById('debt').value) || 0;
+        const currentApr = parseFloat(document.getElementById('currentApr').value) || 0;
+        const months = parseFloat(document.getElementById('months').value) || 0;
+        const feePercent = parseFloat(document.getElementById('fee').value) || 0;
+
+        if (debt === 0 || months === 0) {
+            alert("We need actual numbers to work with here. Please enter your debt and the offer details.");
+            return;
+        }
+
+        // Hide empty state, show results
+        document.getElementById('empty-state').classList.add('hidden');
+        document.getElementById('results-area').classList.remove('hidden');
+
+        // Logic
+        const transferFeeCost = debt * (feePercent / 100);
+        const newTotalDebt = debt + transferFeeCost;
+        const monthlyPayment = newTotalDebt / months;
+
+        // Approx old interest (Simple Amortization Estimate)
+        let oldBalance = debt;
+        let totalInterestOld = 0;
+        let monthlyRate = (currentApr / 100) / 12;
+
+        // Simulate paying off the old loan over the same time period
+        for (let i = 0; i < months; i++) {
+            let interest = oldBalance * monthlyRate;
+            totalInterestOld += interest;
+            let principal = monthlyPayment - interest; 
+            oldBalance -= principal;
+            if (oldBalance < 0) oldBalance = 0;
+        }
+        
+        // If the old interest calc breaks (negative principal), fallback to simple interest estimate
+        if(totalInterestOld < 0) totalInterestOld = (debt * (currentApr/100)) * (months/12);
+
+        const savings = totalInterestOld - transferFeeCost;
+
+        // Update UI
+        document.getElementById('feeCost').innerText = "$" + transferFeeCost.toFixed(2);
+        document.getElementById('oldInterest').innerText = "$" + totalInterestOld.toFixed(2);
+        
+        const saveEl = document.getElementById('totalSavings');
+        saveEl.innerText = "$" + savings.toFixed(2);
+        
+        document.getElementById('monthlyPay').innerText = "$" + monthlyPayment.toFixed(2);
+        document.getElementById('monthText').innerText = months;
+
+        // Snark Logic
+        const snarkBox = document.getElementById('snarkComment');
+        let snark = "";
+        let snarkColor = "";
+        let snarkBorder = "";
+
+        if (savings < 0) {
+            snark = "🛑 <strong>STOP. ABORT.</strong> You are losing money. The transfer fee costs more than the interest you'd save. Do NOT do this.";
+            snarkColor = "bg-red-50 text-red-800";
+            snarkBorder = "border-red-500";
+            saveEl.className = "font-black text-3xl text-red-600";
+        } else if (savings < 100) {
+            snark = "<strong>Meh.</strong> You're saving like $50 bucks. Better than a kick in the teeth, but is it worth the hard credit inquiry? Barely.";
+            snarkColor = "bg-yellow-50 text-yellow-800";
+            snarkBorder = "border-yellow-500";
+            saveEl.className = "font-black text-3xl text-yellow-600";
+        } else if (savings > 1000) {
+            snark = "🔥 <strong>NO BRAINER.</strong> That is over a grand you are keeping away from the banks. Do this immediately. Treat yourself (but actually don't, you're in debt).";
+            snarkColor = "bg-green-50 text-green-800";
+            snarkBorder = "border-green-500";
+            saveEl.className = "font-black text-3xl text-green-600";
+        } else {
+            snark = "✅ <strong>Solid Move.</strong> You're saving a decent chunk. Just make sure you strictly follow the payment plan below.";
+            snarkColor = "bg-blue-50 text-blue-800";
+            snarkBorder = "border-blue-500";
+            saveEl.className = "font-black text-3xl text-green-600";
+        }
+
+        snarkBox.innerHTML = snark;
+        snarkBox.className = `snark-box text-sm leading-relaxed ${snarkColor} ${snarkBorder}`;
+        
+        // Scroll to results on mobile
+        if(window.innerWidth < 1024) {
+            document.getElementById('results-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+</script>
