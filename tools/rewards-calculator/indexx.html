@@ -1,0 +1,296 @@
+---
+layout: tool
+title: "Credit Card Rewards Calculator"
+description: "Stop guessing. Enter your monthly spending and see exactly which credit card earns you the most money in 2025."
+permalink: /tools/rewards-calculator/
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Scoped Styles */
+    .calc-wrapper { font-family: 'Inter', sans-serif; color: #0f172a; }
+    
+    /* Input Styling */
+    .spend-input-group { position: relative; transition: all 0.2s; }
+    .spend-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem; /* Space for icon */
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #1e293b;
+        transition: all 0.2s;
+        background: #fff;
+    }
+    .spend-input:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px #e0e7ff;
+        outline: none;
+    }
+    .input-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 1.1rem;
+        transition: color 0.2s;
+    }
+    .spend-input:focus + .input-icon { color: #4f46e5; }
+
+    /* Result Card Styling */
+    .card-row {
+        display: grid;
+        grid-template-columns: 50px 1fr auto;
+        gap: 1rem;
+        padding: 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        align-items: center;
+        transition: background 0.2s;
+    }
+    .card-row:last-child { border-bottom: none; }
+    .card-row:hover { background-color: #f8fafc; }
+    
+    .winner-card {
+        background: #f0fdf4; /* Light Green */
+        border: 2px solid #16a34a;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        position: relative;
+        box-shadow: 0 10px 30px -5px rgba(22, 163, 74, 0.15);
+    }
+    .winner-badge {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #16a34a;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        padding: 4px 12px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    /* Animations */
+    .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(20px); }
+    @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="calc-wrapper py-12 bg-slate-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div class="lg:col-span-5 space-y-6 sticky top-8">
+                <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-gray-200 p-6 md:p-8">
+                    <div class="flex items-center mb-6 pb-4 border-b border-gray-100">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 mr-4">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 leading-tight">Monthly Spend</h3>
+                            <p class="text-xs text-slate-500">Enter your average expenses</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-5">
+                        <div class="spend-input-group">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Dining & Delivery</label>
+                            <input type="number" id="dining" class="spend-input" placeholder="0" oninput="calculate()" value="500">
+                            <i class="fa-solid fa-utensils input-icon"></i>
+                        </div>
+
+                        <div class="spend-input-group">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Groceries</label>
+                            <input type="number" id="groceries" class="spend-input" placeholder="0" oninput="calculate()" value="400">
+                            <i class="fa-solid fa-cart-shopping input-icon"></i>
+                        </div>
+
+                        <div class="spend-input-group">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Travel (Flights/Hotels)</label>
+                            <input type="number" id="travel" class="spend-input" placeholder="0" oninput="calculate()" value="200">
+                            <i class="fa-solid fa-plane input-icon"></i>
+                        </div>
+
+                        <div class="spend-input-group">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Gas & Transit</label>
+                            <input type="number" id="gas" class="spend-input" placeholder="0" oninput="calculate()" value="150">
+                            <i class="fa-solid fa-gas-pump input-icon"></i>
+                        </div>
+
+                        <div class="spend-input-group">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Everything Else</label>
+                            <input type="number" id="other" class="spend-input" placeholder="0" oninput="calculate()" value="1000">
+                            <i class="fa-solid fa-receipt input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-4 bg-indigo-50 rounded-xl text-xs text-indigo-800 leading-relaxed border border-indigo-100 flex gap-3">
+                        <i class="fa-solid fa-circle-info mt-0.5 text-indigo-600"></i>
+                        <div>
+                            <strong>Pro Tip:</strong> We value transferable points (Amex/Chase) at 1 cent each for a fair comparison against cash back cards. In reality, they can be worth 2x more if used for business class flights.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-gray-200 overflow-hidden">
+                    <div class="bg-slate-50 px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-trophy text-amber-500"></i> Leaderboard
+                        </h3>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider bg-white px-3 py-1 rounded-full border border-gray-200 shadow-sm">Net Annual Value</span>
+                    </div>
+                    
+                    <div id="results-list" class="p-6 md:p-8 min-h-[500px]">
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Card Database
+    const cards = [
+        {
+            name: "Amex Gold Card",
+            fee: 325,
+            img: "bg-gradient-to-br from-yellow-400 to-yellow-600", 
+            calc: (d, g, t, gas, o) => {
+                // 4x Dining/Grocery (capped at 25k/yr for grocery but simplistic here), 3x Flights
+                const rewards = ((d * 4) + (g * 4) + (t * 3) + (gas * 1) + (o * 1)) * 12 * 0.01;
+                // Add approx $240 in dining credits (Uber/Grubhub) to be fair to fee
+                return rewards + 240; 
+            },
+            note: "4x on Food is unbeatable."
+        },
+        {
+            name: "Chase Sapphire Preferred",
+            fee: 95,
+            img: "bg-gradient-to-br from-blue-600 to-blue-800",
+            calc: (d, g, t, gas, o) => {
+                // Simplified: 3x Dining, 2x Travel, 1x else. + $50 hotel credit
+                const rewards = ((d * 3) + (t * 2) + (g * 1) + (gas * 1) + (o * 1)) * 12 * 0.01;
+                return rewards + 50; 
+            },
+            note: "Great starter travel card."
+        },
+        {
+            name: "Capital One Savor",
+            fee: 0,
+            img: "bg-gradient-to-br from-orange-500 to-orange-700",
+            calc: (d, g, t, gas, o) => ((d * 0.03) + (g * 0.03) + (t * 0.01) + (gas * 0.01) + (o * 0.01)) * 12,
+            note: "Best free card for foodies."
+        },
+        {
+            name: "Citi Double Cash",
+            fee: 0,
+            img: "bg-gradient-to-br from-teal-500 to-teal-700",
+            calc: (d, g, t, gas, o) => ((d + g + t + gas + o) * 0.02) * 12,
+            note: "Simple 2% on everything."
+        },
+        {
+            name: "Amex Blue Cash Preferred",
+            fee: 95,
+            img: "bg-gradient-to-br from-blue-400 to-blue-600",
+            calc: (d, g, t, gas, o) => {
+                // 6% grocery capped at $6k/yr ($500/mo)
+                const groceryEarnings = (Math.min(g, 500) * 0.06) + (Math.max(0, g - 500) * 0.01);
+                // 3% gas, 1% else
+                return ((d * 0.01) + groceryEarnings + (t * 0.01) + (gas * 0.03) + (o * 0.01)) * 12;
+            },
+            note: "6% on groceries (capped)."
+        },
+        {
+            name: "Capital One Venture X",
+            fee: 395,
+            img: "bg-gradient-to-br from-slate-700 to-slate-900",
+            calc: (d, g, t, gas, o) => {
+                // 2x Flat on everything
+                const rewards = ((d + g + t + gas + o) * 2) * 12 * 0.01;
+                // Add 10k anniversary bonus ($100) + $300 travel credit (only if they spend enough on travel)
+                const travelCredit = Math.min(300, t * 12);
+                return rewards + 100 + travelCredit;
+            },
+            note: "Includes $400 in annual credits."
+        },
+        {
+            name: "Chase Freedom Unlimited",
+            fee: 0,
+            img: "bg-gradient-to-br from-indigo-500 to-indigo-700",
+            calc: (d, g, t, gas, o) => ((d * 0.03) + (g * 0.015) + (t * 0.015) + (gas * 0.015) + (o * 0.015)) * 12, 
+            note: "3% Dining + 1.5% Base."
+        }
+    ];
+
+    function calculate() {
+        const d = parseFloat(document.getElementById('dining').value) || 0;
+        const g = parseFloat(document.getElementById('groceries').value) || 0;
+        const t = parseFloat(document.getElementById('travel').value) || 0;
+        const gas = parseFloat(document.getElementById('gas').value) || 0;
+        const o = parseFloat(document.getElementById('other').value) || 0;
+
+        // Calculate Net Value (Rewards - Fee)
+        const results = cards.map(card => {
+            const grossRewards = card.calc(d, g, t, gas, o);
+            const netValue = grossRewards - card.fee;
+            return { ...card, netValue, grossRewards };
+        });
+
+        // Sort by Net Value
+        results.sort((a, b) => b.netValue - a.netValue);
+
+        // Render
+        const list = document.getElementById('results-list');
+        list.innerHTML = '';
+
+        results.forEach((card, index) => {
+            const isWinner = index === 0;
+            let html = '';
+            
+            if (isWinner) {
+                html = `
+                <div class="winner-card p-6 flex flex-col md:flex-row items-center gap-6 slide-up">
+                    <div class="winner-badge"><i class="fa-solid fa-crown mr-1"></i> #1 Choice</div>
+                    <div class="w-16 h-10 rounded-lg ${card.img} shadow-lg shadow-black/20 flex-shrink-0"></div>
+                    <div class="flex-grow text-center md:text-left">
+                        <h4 class="text-xl font-black text-slate-900 leading-tight">${card.name}</h4>
+                        <p class="text-sm text-green-700 font-bold mt-1"><i class="fa-solid fa-check-circle mr-1"></i> ${card.note}</p>
+                    </div>
+                    <div class="text-right pl-4 border-l border-green-200">
+                        <div class="text-3xl font-black text-green-600 tracking-tight">$${card.netValue.toFixed(0)}</div>
+                        <div class="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Net Annual Value</div>
+                    </div>
+                </div>
+                `;
+            } else {
+                html = `
+                <div class="card-row rounded-xl hover:bg-slate-50 slide-up" style="animation-delay: ${index * 50}ms">
+                    <div class="w-12 h-8 rounded ${card.img} opacity-90 shadow-sm"></div>
+                    <div>
+                        <h4 class="font-bold text-slate-700 text-sm md:text-base">${card.name}</h4>
+                        <p class="text-xs text-slate-400 font-medium">Fee: $${card.fee}/yr</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-slate-900 text-lg">$${card.netValue.toFixed(0)}</div>
+                    </div>
+                </div>
+                `;
+            }
+            list.innerHTML += html;
+        });
+    }
+
+    // Run on load
+    window.addEventListener('DOMContentLoaded', calculate);
+  </script>
+  
