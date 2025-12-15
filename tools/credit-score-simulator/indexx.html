@@ -1,0 +1,530 @@
+---
+layout: tool
+title: "Credit Simulator"
+description: "Simulate how your financial decisions impact your credit score."
+permalink: /tools/credit-score-simulator/
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+    /* Professional Polish Overrides */
+    .sim-app {
+        font-family: 'Inter', sans-serif;
+        color: #1e293b;
+        background-color: #f8fafc;
+        min-height: 100vh;
+    }
+
+    /* The "App" Grid - Matches your screenshot's 3-column density */
+    .cw-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+    }
+
+    /* The Option Card */
+    .cw-option {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .cw-card-visual {
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 1rem 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100px;
+        transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    /* Hover State */
+    .cw-card-visual:hover {
+        background-color: #f1f5f9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Active/Checked State - turns blueish like a real app selection */
+    .cw-radio:checked + .cw-card-visual {
+        background-color: #eff6ff; /* Light Blue */
+        border-color: #3b82f6; /* Blue Border */
+        box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    /* Icons */
+    .cw-icon {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #64748b; /* Slate 500 */
+        transition: color 0.15s;
+    }
+
+    .cw-radio:checked + .cw-card-visual .cw-icon {
+        color: #2563eb; /* Blue 600 */
+    }
+
+    /* Text Labels */
+    .cw-label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-align: center;
+        line-height: 1.2;
+        color: #334155;
+    }
+
+    /* Gauge Styling */
+    .gauge-wrapper {
+        position: relative;
+        width: 220px;
+        height: 110px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .gauge-arc {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: conic-gradient(from 180deg, 
+            #ef4444 180deg 240deg,  /* Red */
+            #eab308 240deg 300deg,  /* Yellow */
+            #22c55e 300deg 360deg   /* Green */
+        );
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+        transform: rotate(180deg); /* Initial state */
+        transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gauge-inner {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 190px;
+        height: 95px;
+        background: white;
+        border-top-left-radius: 110px;
+        border-top-right-radius: 110px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        padding-bottom: 5px;
+    }
+
+    /* Result Panel Stickiness */
+    .sticky-panel {
+        position: sticky;
+        top: 2rem;
+    }
+</style>
+
+<div class="sim-app py-10">
+    <div class="max-w-6xl mx-auto px-4">
+        
+        <div class="mb-8 border-b border-gray-200 pb-6">
+            <h1 class="text-2xl font-bold text-slate-900">Credit Simulator</h1>
+            <p class="text-sm text-slate-500 mt-1">Simulate financial choices to see their estimated impact.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex justify-between items-end mb-4">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-400">Current Score</label>
+                        <div class="text-3xl font-black text-slate-900" id="display-base-score">700</div>
+                    </div>
+                    
+                    <input type="range" id="base-score-slider" min="300" max="850" value="700" 
+                        class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 mb-6">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Credit Limit</label>
+                            <span class="absolute left-3 top-7 text-slate-400 text-sm">$</span>
+                            <input type="number" id="total-limit" value="10000" class="w-full pl-6 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Current Balance</label>
+                            <span class="absolute left-3 top-7 text-slate-400 text-sm">$</span>
+                            <input type="number" id="total-balance" value="2500" class="w-full pl-6 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 px-1">I might...</h3>
+                    
+                    <div class="cw-grid">
+                        
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="regular_pay" class="cw-radio hidden" checked onchange="toggleInputs('none')">
+                            <div class="cw-card-visual">
+                                <i class="fa-regular fa-credit-card cw-icon"></i>
+                                <span class="cw-label">Make regular card payments</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="bills_time" class="cw-radio hidden" onchange="toggleInputs('none')">
+                            <div class="cw-card-visual">
+                                <i class="fa-regular fa-calendar-check cw-icon"></i>
+                                <span class="cw-label">Pay bills on time</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="pay" class="cw-radio hidden" onchange="toggleInputs('pay')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-money-bill-wave cw-icon"></i>
+                                <span class="cw-label">Pay down balances</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="mortgage" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-house cw-icon"></i>
+                                <span class="cw-label">Take out a mortgage</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="new_card" class="cw-radio hidden" onchange="toggleInputs('new_card')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-plus cw-icon"></i>
+                                <span class="cw-label">Get a credit card</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="limit_increase" class="cw-radio hidden" onchange="toggleInputs('limit_increase')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-arrow-up-right-from-square cw-icon"></i>
+                                <span class="cw-label">Increase card limit</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="apply_credit" class="cw-radio hidden" onchange="toggleInputs('none')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-file-signature cw-icon"></i>
+                                <span class="cw-label">Apply for new credit</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="auto" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-car cw-icon"></i>
+                                <span class="cw-label">Take out an auto loan</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="consolidate" class="cw-radio hidden" onchange="toggleInputs('consolidate')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-layer-group cw-icon"></i>
+                                <span class="cw-label">Consolidate your balances</span>
+                            </div>
+                        </label>
+
+                        <label class="cw-option">
+                            <input type="radio" name="action" value="personal" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-sack-dollar cw-icon"></i>
+                                <span class="cw-label">Take out a personal loan</span>
+                            </div>
+                        </label>
+
+                         <label class="cw-option">
+                            <input type="radio" name="action" value="bankruptcy" class="cw-radio hidden" onchange="toggleInputs('none')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-gavel cw-icon"></i>
+                                <span class="cw-label">Declare bankruptcy</span>
+                            </div>
+                        </label>
+                        
+                         <label class="cw-option">
+                            <input type="radio" name="action" value="late" class="cw-radio hidden" onchange="toggleInputs('late')">
+                            <div class="cw-card-visual">
+                                <i class="fa-solid fa-triangle-exclamation cw-icon"></i>
+                                <span class="cw-label">Forget to pay a bill</span>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <div id="dynamic-inputs" class="hidden bg-slate-800 rounded-xl p-6 text-white shadow-lg transition-all duration-300">
+                    </div>
+
+                <button onclick="calculateSimulation()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 transition-transform transform active:scale-[0.98]">
+                    Simulate Scenario
+                </button>
+
+            </div>
+
+            <div class="lg:col-span-5 relative">
+                <div class="sticky-panel bg-white p-8 rounded-2xl shadow-xl border border-gray-100 text-center">
+                    
+                    <h3 class="font-bold text-slate-400 text-xs uppercase tracking-widest mb-6">Projected Score</h3>
+                    
+                    <div class="gauge-wrapper mb-4">
+                        <div class="gauge-arc" id="gauge-fill"></div>
+                        <div class="gauge-inner">
+                            <div class="text-5xl font-black text-slate-900 tracking-tighter" id="result-score">700</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <span id="score-rating" class="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full text-sm">Good</span>
+                    </div>
+
+                    <div id="points-change" class="text-lg font-bold text-slate-400 mb-8 border-t border-slate-100 pt-4">
+                        <span class="text-slate-300">-- No Change --</span>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 text-left border border-slate-100">
+                        <div class="flex items-start gap-3">
+                            <div class="min-w-[20px] pt-1"><i class="fa-solid fa-robot text-blue-500"></i></div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Simulator Analysis</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed" id="res-analysis">
+                                    Select an action from the grid to see how it might impact your credit score.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-between items-center px-4">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Est. Utilization</span>
+                        <span class="font-bold text-slate-900" id="res-util">25%</span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- STATE MANAGEMENT ---
+    const els = {
+        slider: document.getElementById('base-score-slider'),
+        scoreDisplay: document.getElementById('display-base-score'),
+        limit: document.getElementById('total-limit'),
+        balance: document.getElementById('total-balance'),
+        inputArea: document.getElementById('dynamic-inputs'),
+        resScore: document.getElementById('result-score'),
+        resRating: document.getElementById('score-rating'),
+        resChange: document.getElementById('points-change'),
+        resAnalysis: document.getElementById('res-analysis'),
+        resUtil: document.getElementById('res-util'),
+        gauge: document.getElementById('gauge-fill')
+    };
+
+    // --- SYNC SLIDER ---
+    els.slider.addEventListener('input', (e) => {
+        els.scoreDisplay.innerText = e.target.value;
+        updateGauge(parseInt(e.target.value));
+    });
+
+    function updateGauge(score) {
+        // Map 300-850 to 0-180 degrees (roughly)
+        // Formula: ((Score - 300) / 550) * 180
+        const percentage = Math.max(0, Math.min((score - 300) / 550, 1));
+        const rotation = (percentage * 180); 
+        // We add 180 because our CSS starts rotated
+        els.gauge.style.transform = `rotate(${rotation}deg)`;
+    }
+
+    // --- TOGGLE INPUTS ---
+    function toggleInputs(type) {
+        let html = '';
+        
+        if (type === 'none') {
+            els.inputArea.classList.add('hidden');
+            return;
+        }
+
+        els.inputArea.classList.remove('hidden');
+
+        if (type === 'pay') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">Amount to Pay ($)</label>
+                    <input type="number" id="action-amount" value="1000" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">`;
+        } 
+        else if (type === 'new_card') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">New Credit Limit ($)</label>
+                    <input type="number" id="action-amount" value="5000" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">`;
+        }
+        else if (type === 'limit_increase') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">Requested Increase ($)</label>
+                    <input type="number" id="action-amount" value="2000" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">`;
+        }
+        else if (type === 'loan') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">Loan Amount ($)</label>
+                    <input type="number" id="action-amount" value="25000" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">`;
+        }
+        else if (type === 'consolidate') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">Amount to Consolidate ($)</label>
+                    <input type="number" id="action-amount" value="5000" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">`;
+        }
+        else if (type === 'late') {
+            html = `<label class="block text-xs font-bold text-gray-400 uppercase mb-2">How Late?</label>
+                    <select id="action-late-type" class="w-full bg-slate-700 border border-slate-600 rounded p-3 text-white font-bold focus:outline-none focus:border-blue-500">
+                        <option value="30">30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90+ Days</option>
+                    </select>`;
+        }
+        
+        els.inputArea.innerHTML = html;
+    }
+
+    // --- SIMULATE ---
+    function calculateSimulation() {
+        const currentScore = parseInt(els.slider.value);
+        const limit = parseInt(els.limit.value) || 1;
+        const balance = parseInt(els.balance.value) || 0;
+        const actionEl = document.querySelector('input[name="action"]:checked');
+        
+        if (!actionEl) return;
+        
+        const action = actionEl.value;
+        const amtInput = document.getElementById('action-amount');
+        const amount = amtInput ? parseInt(amtInput.value) : 0;
+
+        let newScore = currentScore;
+        let newBal = balance;
+        let newLim = limit;
+        let msg = "";
+        
+        const oldUtil = (balance / limit) * 100;
+
+        // --- ENGINE LOGIC ---
+        switch(action) {
+            case 'regular_pay':
+                newScore += 5;
+                msg = "Positive trend. Consistent payments are 35% of your score. Keep this up for 6 months to see real growth.";
+                break;
+            
+            case 'bills_time':
+                newScore += 3;
+                msg = "Good habit. While utility bills don't always boost your score immediately, avoiding collections keeps your record clean.";
+                break;
+
+            case 'pay':
+                newBal = Math.max(0, balance - amount);
+                const utilDrop = oldUtil - ((newBal / newLim) * 100);
+                if (utilDrop > 15) newScore += 30;
+                else if (utilDrop > 5) newScore += 15;
+                else newScore += 5;
+                msg = `Excellent. Paying down $${amount} lowered your utilization. This is the fastest way to spike a score.`;
+                break;
+
+            case 'mortgage':
+                newScore -= 15;
+                msg = "Expect a temporary drop due to the hard inquiry and new account. However, a mortgage adds to your 'Credit Mix', which helps long term.";
+                break;
+            
+            case 'auto':
+            case 'personal':
+                newScore -= 10;
+                msg = "Taking out a loan triggers a hard inquiry (-5 pts) and lowers your average account age. It will bounce back with on-time payments.";
+                break;
+
+            case 'apply_credit':
+                newScore -= 5;
+                msg = "Just applying triggers a 'Hard Inquiry'. This usually knocks 2-5 points off your score for 12 months.";
+                break;
+
+            case 'new_card':
+                newLim += amount;
+                newScore -= 5; // Hit for inquiry
+                if ((newBal / newLim)*100 < 30 && oldUtil > 30) newScore += 25; // Bonus for utilization fix
+                msg = "Mixed bag: You lost points for the inquiry, but increasing your total limit lowered your utilization ratio, likely boosting your score overall.";
+                break;
+
+            case 'limit_increase':
+                newLim += amount;
+                if ((newBal / newLim)*100 < 30 && oldUtil > 30) newScore += 20;
+                else newScore += 5;
+                msg = "Smart move. Assuming no hard pull was required, you lowered your utilization without adding a new 'young' account.";
+                break;
+
+            case 'consolidate':
+                newBal = Math.max(0, balance - amount);
+                newScore += 35;
+                msg = "Big win. Moving revolving credit card debt to an installment loan helps your score significantly by crushing your utilization ratio.";
+                break;
+
+            case 'bankruptcy':
+                newScore = Math.max(300, currentScore - 200);
+                msg = "The nuclear option. Bankruptcy is a catastrophic hit that remains on your report for 7 to 10 years.";
+                break;
+
+            case 'late':
+                const days = document.getElementById('action-late-type').value;
+                if(days == '30') newScore -= 50;
+                else if(days == '60') newScore -= 80;
+                else newScore -= 130;
+                msg = "Danger. Payment history is the most important factor. A recent late payment is a massive red flag to lenders.";
+                break;
+        }
+
+        // --- UPDATE UI ---
+        
+        // 1. Score Animation
+        let start = currentScore;
+        const diff = newScore - currentScore;
+        let step = 0;
+        const steps = 20;
+        
+        const timer = setInterval(() => {
+            step++;
+            const curr = Math.floor(start + (diff * (step/steps)));
+            els.resScore.innerText = curr;
+            updateGauge(curr); // Animate gauge
+            
+            if(step >= steps) {
+                clearInterval(timer);
+                els.resScore.innerText = newScore;
+            }
+        }, 15);
+
+        // 2. Diff Badge
+        if (diff > 0) {
+            els.resChange.innerHTML = `<span class="text-green-500"><i class="fa-solid fa-arrow-up"></i> +${diff} Points</span>`;
+        } else if (diff < 0) {
+            els.resChange.innerHTML = `<span class="text-red-500"><i class="fa-solid fa-arrow-down"></i> ${diff} Points</span>`;
+        } else {
+             els.resChange.innerHTML = `<span class="text-slate-300">-- No Change --</span>`;
+        }
+
+        // 3. Rating
+        if (newScore >= 800) els.resRating.innerText = "Exceptional";
+        else if (newScore >= 740) els.resRating.innerText = "Very Good";
+        else if (newScore >= 670) els.resRating.innerText = "Good";
+        else if (newScore >= 580) els.resRating.innerText = "Fair";
+        else els.resRating.innerText = "Poor";
+
+        // 4. Util & Msg
+        els.resUtil.innerText = Math.round((newBal / newLim) * 100) + "%";
+        els.resAnalysis.innerText = msg;
+    }
+
+    // Init
+    updateGauge(parseInt(els.slider.value));
+</script>
