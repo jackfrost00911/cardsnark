@@ -1,0 +1,435 @@
+---
+layout: tool
+title: "The Credit Score Crystal Ball"
+description: "See exactly how your credit score changes if you buy a house, miss a payment, or declare bankruptcy."
+permalink: /tools/credit-score-simulator/
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Scoped styles for the Simulator */
+    .sim-wrapper { color: #334155; font-family: 'Inter', sans-serif; }
+    
+    /* The "CreditWise" Style Grid Buttons */
+    .cw-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+    
+    .cw-card {
+        background-color: #f1f5f9; /* Light grey background like screenshot */
+        border-radius: 0.75rem;
+        padding: 1rem 0.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 110px;
+    }
+
+    .cw-card:hover { background-color: #e2e8f0; }
+
+    /* Selected State */
+    .cw-radio:checked + .cw-card {
+        background-color: #eef2ff;
+        border-color: #6366f1; /* Indigo border when active */
+        color: #4338ca;
+    }
+    
+    .cw-icon { font-size: 1.5rem; margin-bottom: 0.5rem; color: #64748b; }
+    .cw-radio:checked + .cw-card .cw-icon { color: #4f46e5; }
+    
+    .cw-label { font-size: 0.75rem; font-weight: 700; line-height: 1.2; }
+
+    /* Inputs & Sliders */
+    .pro-input { 
+        width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; 
+        font-weight: 600; color: #1e293b;
+    }
+    
+    /* Gauge Animation */
+    .gauge-container { position: relative; width: 280px; height: 140px; margin: 0 auto; overflow: hidden; }
+    .gauge-bg { position: absolute; top: 0; left: 0; width: 280px; height: 280px; border-radius: 50%; background: #e2e8f0; clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); }
+    .gauge-fill { 
+        position: absolute; top: 0; left: 0; width: 280px; height: 280px; border-radius: 50%; 
+        background: conic-gradient(from 180deg, #ef4444 0deg, #eab308 90deg, #22c55e 180deg); 
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); 
+        transform: rotate(0deg); transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+    }
+    .gauge-center { 
+        position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 240px; height: 120px; 
+        background: white; border-top-left-radius: 150px; border-top-right-radius: 150px; 
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 10px;
+    }
+
+    .slide-up { animation: slideUp 0.4s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="sim-wrapper py-8 bg-slate-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4">
+        
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black text-slate-900 mb-2">Credit Simulator</h1>
+            <p class="text-slate-500">See how your decisions affect your score before you make them.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="space-y-6">
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-900">Current Score</h3>
+                        <input type="number" id="base-score-input" value="700" class="w-16 text-right font-bold text-indigo-600 bg-indigo-50 rounded p-1" min="300" max="850">
+                    </div>
+                    <input type="range" id="base-score-slider" min="300" max="850" value="700" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 mb-6">
+
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Total Limit</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-gray-400">$</span>
+                                <input type="number" id="total-limit" value="10000" class="pro-input pl-6 py-2">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1">Current Debt</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-2.5 text-gray-400">$</span>
+                                <input type="number" id="total-balance" value="2500" class="pro-input pl-6 py-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">I might...</h3>
+                    
+                    <div class="cw-grid">
+                        <label>
+                            <input type="radio" name="action" value="regular_pay" class="cw-radio hidden" checked onchange="toggleInputs('none')">
+                            <div class="cw-card">
+                                <i class="fa-regular fa-calendar-check cw-icon"></i>
+                                <span class="cw-label">Make regular payments</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="pay" class="cw-radio hidden" onchange="toggleInputs('pay')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-arrow-trend-down cw-icon"></i>
+                                <span class="cw-label">Pay down balances</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="mortgage" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-house cw-icon"></i>
+                                <span class="cw-label">Take out a mortgage</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="new_card" class="cw-radio hidden" onchange="toggleInputs('new_card')">
+                            <div class="cw-card">
+                                <i class="fa-regular fa-credit-card cw-icon"></i>
+                                <span class="cw-label">Get a credit card</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="limit_increase" class="cw-radio hidden" onchange="toggleInputs('limit_increase')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-arrow-up-right-from-square cw-icon"></i>
+                                <span class="cw-label">Increase card limit</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="auto" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-car cw-icon"></i>
+                                <span class="cw-label">Take out an auto loan</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="consolidate" class="cw-radio hidden" onchange="toggleInputs('consolidate')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-money-bill-transfer cw-icon"></i>
+                                <span class="cw-label">Consolidate balances</span>
+                            </div>
+                        </label>
+
+                        <label>
+                            <input type="radio" name="action" value="personal" class="cw-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-sack-dollar cw-icon"></i>
+                                <span class="cw-label">Take out personal loan</span>
+                            </div>
+                        </label>
+
+                         <label>
+                            <input type="radio" name="action" value="bankruptcy" class="cw-radio hidden" onchange="toggleInputs('none')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-gavel cw-icon"></i>
+                                <span class="cw-label">Declare bankruptcy</span>
+                            </div>
+                        </label>
+                        
+                         <label>
+                            <input type="radio" name="action" value="late" class="cw-radio hidden" onchange="toggleInputs('late')">
+                            <div class="cw-card">
+                                <i class="fa-solid fa-triangle-exclamation cw-icon"></i>
+                                <span class="cw-label">Forget to pay a bill</span>
+                            </div>
+                        </label>
+
+                    </div>
+
+                    <div id="dynamic-inputs" class="mt-6 pt-6 border-t border-gray-200 hidden">
+                        </div>
+
+                    <button onclick="calculateSimulation()" class="w-full mt-6 bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-95">
+                        Simulate
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="md:sticky md:top-6 h-fit">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 text-center relative overflow-hidden">
+                    
+                    <div class="gauge-container mb-2">
+                        <div class="gauge-bg"></div>
+                        <div class="gauge-fill" id="gauge-fill"></div>
+                        <div class="gauge-center">
+                            <div class="text-6xl font-black text-slate-900 tracking-tighter" id="result-score">700</div>
+                            <div class="text-sm font-bold uppercase text-gray-400" id="result-rating">Good</div>
+                        </div>
+                    </div>
+                    
+                    <div id="points-badge" class="inline-flex items-center gap-2 px-4 py-1.5 bg-gray-100 text-gray-500 rounded-full font-bold text-sm mb-8">
+                        No Change
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 text-left">
+                        <div class="bg-slate-50 p-3 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase">New Utilization</div>
+                            <div class="font-bold text-slate-900" id="res-util">25%</div>
+                        </div>
+                        <div class="bg-slate-50 p-3 rounded-lg">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase">Status</div>
+                            <div class="font-bold text-green-600" id="res-history">OK</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-6 border-t border-gray-100 text-left">
+                        <h4 class="font-bold text-slate-900 text-sm mb-2"><i class="fa-solid fa-circle-info text-indigo-500 mr-2"></i>What this means:</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed" id="res-analysis">
+                            Select an action to see the potential impact on your credit score.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- INPUT HANDLERS ---
+    const baseSlider = document.getElementById('base-score-slider');
+    const baseInput = document.getElementById('base-score-input');
+    const limitInput = document.getElementById('total-limit');
+    const balInput = document.getElementById('total-balance');
+
+    [baseSlider, baseInput].forEach(el => {
+        el.addEventListener('input', (e) => {
+            baseSlider.value = e.target.value;
+            baseInput.value = e.target.value;
+        });
+    });
+
+    // --- DYNAMIC INPUTS ---
+    const inputArea = document.getElementById('dynamic-inputs');
+
+    function toggleInputs(type) {
+        inputArea.classList.remove('hidden');
+        inputArea.classList.add('slide-up');
+        let html = '';
+
+        if (type === 'none') {
+            inputArea.classList.add('hidden');
+            return;
+        }
+
+        if (type === 'pay') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">Amount to Pay</label>
+                    <input type="number" id="action-amount" value="1000" class="pro-input">`;
+        } 
+        else if (type === 'new_card') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">New Card Limit</label>
+                    <input type="number" id="action-amount" value="5000" class="pro-input">`;
+        }
+        else if (type === 'limit_increase') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">Increase Amount</label>
+                    <input type="number" id="action-amount" value="2000" class="pro-input">`;
+        }
+        else if (type === 'loan') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">Loan Amount</label>
+                    <input type="number" id="action-amount" value="20000" class="pro-input">`;
+        }
+        else if (type === 'consolidate') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">Amount to Consolidate</label>
+                    <input type="number" id="action-amount" value="5000" class="pro-input">`;
+        }
+        else if (type === 'late') {
+            html = `<label class="block text-xs font-bold text-slate-400 uppercase mb-2">How Late?</label>
+                    <select id="action-late-type" class="pro-input">
+                        <option value="30">30 Days Late</option>
+                        <option value="60">60 Days Late</option>
+                        <option value="90">90+ Days (Default)</option>
+                    </select>`;
+        }
+        
+        inputArea.innerHTML = html;
+    }
+
+    // --- CALCULATION LOGIC ---
+    function calculateSimulation() {
+        const score = parseInt(baseInput.value);
+        const limit = parseInt(limitInput.value) || 1;
+        const balance = parseInt(balInput.value) || 0;
+        
+        const actionEl = document.querySelector('input[name="action"]:checked');
+        if (!actionEl) return;
+        const action = actionEl.value;
+
+        const amountInput = document.getElementById('action-amount');
+        const amount = amountInput ? parseInt(amountInput.value) : 0;
+
+        let newScore = score;
+        let newBal = balance;
+        let newLim = limit;
+        let commentary = "";
+        let status = "OK";
+        
+        const oldUtil = (balance / limit) * 100;
+
+        // LOGIC SWITCH
+        switch(action) {
+            case 'regular_pay':
+                newScore += 5;
+                commentary = "Consistent on-time payments are the single best thing for your score. Over time, this builds a solid history.";
+                break;
+
+            case 'pay':
+                newBal = Math.max(0, balance - amount);
+                const utilDrop = oldUtil - ((newBal / newLim) * 100);
+                if (utilDrop > 10) newScore += 25;
+                else if (utilDrop > 0) newScore += 10;
+                commentary = `Paying down $${amount} lowered your utilization. This is the fastest way to boost a score instantly.`;
+                break;
+
+            case 'mortgage':
+            case 'auto':
+            case 'personal':
+                newScore -= 10; // Hard inquiry + new account age
+                commentary = "Opening a new loan causes a temporary dip due to the 'Hard Inquiry' and lowering your average account age. It recovers in a few months.";
+                break;
+
+            case 'new_card':
+                newLim += amount;
+                newScore -= 5; // Inquiry
+                // But util helps
+                if ((newBal/newLim)*100 < 30 && oldUtil > 30) newScore += 20; 
+                commentary = "You take a small hit for the inquiry, but the higher total credit limit helps your utilization ratio.";
+                break;
+
+            case 'limit_increase':
+                newLim += amount;
+                if ((newBal/newLim)*100 < 30 && oldUtil > 30) newScore += 20;
+                else newScore += 5;
+                commentary = "The best trick in the book. If you get a limit increase without a hard pull, you lower utilization with zero downside.";
+                break;
+            
+            case 'consolidate':
+                newBal = Math.max(0, balance - amount); // Move revolving to installment
+                newScore += 30;
+                commentary = "Moving high-interest credit card debt to a personal loan lowers your 'Revolving Utilization', which FICO loves.";
+                break;
+
+            case 'bankruptcy':
+                newScore = Math.max(300, score - 200);
+                status = "BANKRUPTCY";
+                commentary = "The nuclear option. A bankruptcy stays on your report for 7-10 years and decimates your score.";
+                break;
+
+            case 'late':
+                const days = document.getElementById('action-late-type').value;
+                if (days == '30') newScore -= 60;
+                else if (days == '60') newScore -= 100;
+                else newScore -= 150;
+                status = "DELINQUENT";
+                commentary = "Missing a payment is the most damaging common error. Even one 30-day late mark can erase years of progress.";
+                break;
+        }
+
+        updateUI(score, newScore, newBal, newLim, status, commentary);
+    }
+
+    function updateUI(oldS, newS, newBal, newLim, status, text) {
+        // Animate Score
+        const scoreDiv = document.getElementById('result-score');
+        const badge = document.getElementById('points-badge');
+        
+        let start = oldS;
+        const diff = newS - oldS;
+        
+        // Gauge Rotate
+        const deg = ((newS - 300) / 550) * 180;
+        document.getElementById('gauge-fill').style.transform = `rotate(${deg}deg)`;
+
+        // Number Counter
+        let counter = 0;
+        const interval = setInterval(() => {
+            counter++;
+            const current = Math.floor(start + (diff * (counter/20)));
+            scoreDiv.innerText = current;
+            if (counter >= 20) {
+                clearInterval(interval);
+                scoreDiv.innerText = newS;
+            }
+        }, 20);
+
+         // Badge
+        if(diff > 0) {
+            badge.className = "inline-flex items-center gap-2 px-4 py-1.5 bg-green-100 text-green-700 rounded-full font-bold text-sm mb-8";
+            badge.innerHTML = `<i class="fa-solid fa-arrow-up"></i> +${diff} Points`;
+        } else if (diff < 0) {
+            badge.className = "inline-flex items-center gap-2 px-4 py-1.5 bg-red-100 text-red-700 rounded-full font-bold text-sm mb-8";
+            badge.innerHTML = `<i class="fa-solid fa-arrow-down"></i> ${diff} Points`;
+        } else {
+             badge.className = "inline-flex items-center gap-2 px-4 py-1.5 bg-gray-100 text-gray-500 rounded-full font-bold text-sm mb-8";
+             badge.innerHTML = `No Change`;
+        }
+
+        // Stats
+        document.getElementById('res-util').innerText = Math.round((newBal/newLim)*100) + "%";
+        
+        const histDiv = document.getElementById('res-history');
+        histDiv.innerText = status;
+        if(status !== "OK") histDiv.className = "font-bold text-red-600";
+        else histDiv.className = "font-bold text-green-600";
+
+        document.getElementById('res-analysis').innerText = text;
+    }
+</script>
