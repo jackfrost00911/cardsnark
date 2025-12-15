@@ -308,4 +308,205 @@ permalink: /tools/credit-score-simulator/
                     <div class="relative">
                         <span class="absolute left-3 top-3 text-gray-400">$</span>
                         <input type="number" id="action-amount" value="${val}" class="pro-input pl-7">
-       
+                    </div>
+                </div>`;
+        }
+        inputArea.innerHTML = html;
+    }
+
+    // --- ROBUST SIMULATION LOGIC ---
+    function calculateSimulation() {
+        if(!baseInput) return;
+        let score = parseInt(baseInput.value);
+        let limit = parseInt(limitInput.value);
+        let balance = parseInt(balInput.value);
+        const actionRadio = document.querySelector('input[name="action"]:checked');
+        if(!actionRadio) return;
+        
+        const action = actionRadio.value;
+        const inputAmount = document.getElementById('action-amount') ? parseInt(document.getElementById('action-amount').value) || 0 : 0;
+        
+        let newScore = score;
+        let newBalance = balance;
+        let newLimit = limit;
+        let commentary = "";
+        let historyStatus = "100%";
+        let inquiryStatus = "Stable";
+
+        const oldUtil = (balance / limit) * 100;
+
+        // 1. PAY DOWN BALANCE
+        if (action === 'pay') {
+            newBalance = Math.max(0, balance - inputAmount);
+            const newUtil = (newBalance / newLimit) * 100;
+            
+            // Logic: Crossing thresholds gives points
+            if (oldUtil > 90 && newUtil <= 90) newScore += 10;
+            if (oldUtil > 70 && newUtil <= 70) newScore += 15;
+            if (oldUtil > 50 && newUtil <= 50) newScore += 20;
+            if (oldUtil > 30 && newUtil <= 30) newScore += 25;
+            if (oldUtil > 10 && newUtil <= 10) newScore += 15;
+            if (inputAmount > 0 && newScore === score) newScore += 5; // Good boy points
+
+            commentary = `You paid down $${inputAmount}. Lower utilization is the fastest way to boost a score. You look less risky to lenders now.`;
+        
+        // 2. SPEND (BAD)
+        } else if (action === 'spend') {
+            newBalance = balance + inputAmount;
+            const newUtil = (newBalance / newLimit) * 100;
+
+            if (oldUtil < 10 && newUtil >= 10) newScore -= 5;
+            if (oldUtil < 30 && newUtil >= 30) newScore -= 15;
+            if (oldUtil < 50 && newUtil >= 50) newScore -= 25;
+            if (oldUtil < 90 && newUtil >= 90) newScore -= 40;
+            if (newUtil > 100) newScore -= 50;
+
+            commentary = `Ouch. Utilization spiked to ${Math.round(newUtil)}%. Lenders get nervous when you max out cards.`;
+
+        // 3. GET NEW CARD
+        } else if (action === 'new_card') {
+            newLimit = limit + inputAmount;
+            const newUtil = (newBalance / newLimit) * 100;
+            
+            // Penalty: Hard Inquiry + Average Age Drop
+            newScore -= 8; 
+            inquiryStatus = "New Inquiry (-5)";
+
+            // Bonus: Utilization drops
+            if (oldUtil > 30 && newUtil < 30) newScore += 20;
+            else if (oldUtil > 10 && newUtil < 10) newScore += 10;
+            
+            commentary = `Short term pain, long term gain. You lost points for the inquiry and "new account," but the higher limit lowers your utilization.`;
+
+        // 4. LIMIT INCREASE (THE HACK)
+        } else if (action === 'limit_increase') {
+            newLimit = limit + inputAmount;
+            const newUtil = (newBalance / newLimit) * 100;
+
+            // Logic: Usually soft pull or minor hit, no "Average Age" damage
+            if (oldUtil > 30 && newUtil < 30) newScore += 25;
+            else if (oldUtil > 50 && newUtil < 50) newScore += 15;
+            else newScore += 0; // No change if util doesn't cross threshold
+
+            commentary = `The smartest play. If they grant the increase without a hard pull, you lower utilization without adding a "new account" to your history.`;
+
+        // 5. LOANS (Mortgage/Auto/Personal)
+        } else if (['mortgage', 'auto', 'personal'].includes(action)) {
+            // Penalty: Hard Inquiry (-5) + New Account Age (-10)
+            newScore -= 15;
+            inquiryStatus = "New Loan Inquiry";
+            
+            commentary = `Taking out a ${action} drops your score initially due to the inquiry and lowering your "Average Age of Accounts." But paying it on time adds to your "Credit Mix" and boosts you later.`;
+
+        // 6. CONSOLIDATE DEBT
+        } else if (action === 'consolidate') {
+            // This is complex. We move Revolving Debt -> Installment Debt.
+            // FICO hates Revolving debt (CCs) but doesn't mind Installment debt as much.
+            
+            const consolidateAmount = Math.min(balance, inputAmount);
+            newBalance = balance - consolidateAmount; // Remove from CC utilization
+            const newUtil = (newBalance / newLimit) * 100;
+
+            // Penalty: New Loan Inquiry
+            newScore -= 5; 
+
+            // Massive Bonus: Utilization Drop
+            if (oldUtil > 90 && newUtil < 10) newScore += 50; 
+            else if (oldUtil > 50 && newUtil < 10) newScore += 35;
+            else if (oldUtil > 30 && newUtil < 10) newScore += 20;
+
+            commentary = `Pro move. You moved "bad" revolving debt to "good" installment debt. Your credit utilization crashed (which is good!), rocketing your score.`;
+
+        // 7. LATE PAYMENT
+        } else if (action === 'late') {
+            const days = document.getElementById('action-late-type').value;
+            historyStatus = "Missed Payment";
+            
+            if (days === "30") {
+                newScore -= (score > 720) ? 90 : 50; // Higher scores fall harder
+                commentary = "A 30-day late payment stays on your report for 7 years. It stings, but you can recover in 18-24 months.";
+            } else if (days === "60") {
+                newScore -= 110;
+                commentary = "Major damage. Lenders view you as high risk. Expect credit limit cuts on other cards.";
+            } else {
+                newScore -= 140;
+                commentary = "Severe delinquency. This is score-shattering. Most major lenders will auto-deny you for a while.";
+            }
+        }
+
+        // Safety caps
+        if (newScore > 850) newScore = 850;
+        if (newScore < 300) newScore = 300;
+
+        updateDashboard(score, newScore, newBalance, newLimit, historyStatus, inquiryStatus, commentary);
+    }
+
+    // --- ANIMATION & UPDATE FUNCTION ---
+    function updateDashboard(oldS, newS, newBal, newLim, hist, inq, comm) {
+        const scoreDiv = document.getElementById('result-score');
+        const rateDiv = document.getElementById('result-rating');
+        if(!scoreDiv || !rateDiv) return;
+        
+        let start = oldS;
+        const end = newS;
+        const duration = 1000;
+        const startTime = performance.now();
+
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 4); // EaseOutQuart
+            
+            const current = Math.floor(start + (end - start) * ease);
+            scoreDiv.innerText = current;
+
+            // Gauge Rotation
+            const deg = ((current - 300) / 550) * 180;
+            const gauge = document.getElementById('gauge-fill');
+            if(gauge) gauge.style.transform = `rotate(${deg}deg)`;
+
+            if (progress < 1) requestAnimationFrame(updateCounter);
+        }
+        requestAnimationFrame(updateCounter);
+
+        // Rating Text
+        if(newS >= 800) rateDiv.innerText = "Exceptional";
+        else if(newS >= 740) rateDiv.innerText = "Very Good";
+        else if(newS >= 670) rateDiv.innerText = "Good";
+        else if(newS >= 580) rateDiv.innerText = "Fair";
+        else rateDiv.innerText = "Poor";
+
+        // Badge Update
+        const badge = document.getElementById('points-badge');
+        if(badge) {
+            const diff = newS - oldS;
+            if(diff > 0) {
+                badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-full font-bold text-sm transition-all";
+                badge.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> +${diff} Points`;
+            } else if (diff < 0) {
+                badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-red-100 text-red-700 rounded-full font-bold text-sm transition-all";
+                badge.innerHTML = `<i class="fa-solid fa-arrow-trend-down"></i> ${diff} Points`;
+            } else {
+                badge.className = "inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-500 rounded-full font-bold text-sm transition-all";
+                badge.innerHTML = `<i class="fa-solid fa-minus"></i> No Change`;
+            }
+        }
+
+        // Stats Update
+        const finalUtil = Math.round((newBal / newLim) * 100);
+        const resUtil = document.getElementById('res-util');
+        const resHist = document.getElementById('res-history');
+        const resInq = document.getElementById('res-inquiries');
+        const resAn = document.getElementById('res-analysis');
+
+        if(resUtil) resUtil.innerText = finalUtil + "%";
+        
+        if(resHist) {
+            resHist.innerText = hist;
+            resHist.className = (hist !== "100%") ? "text-2xl font-black text-red-600" : "text-2xl font-black text-green-600";
+        }
+        
+        if(resInq) resInq.innerText = inq;
+        if(resAn) resAn.innerText = comm;
+    }
+</script>
