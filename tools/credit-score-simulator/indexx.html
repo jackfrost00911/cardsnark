@@ -1,0 +1,311 @@
+
+---
+layout: tool
+title: "The Credit Score Crystal Ball"
+description: "Don't guess. See exactly what happens to your score if you pay off debt, open a new card, or accidentally forget your bill for 3 months."
+permalink: /tools/credit-score-simulator/
+---
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Scoped styles specific to the simulator logic */
+    .sim-wrapper { color: #0f172a; }
+    
+    .input-group { position: relative; margin-bottom: 1.5rem; }
+    .input-group label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.05em; }
+    .pro-input { 
+        width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; 
+        background: #fff; font-weight: 600; color: #1e293b; transition: all 0.2s;
+    }
+    .pro-input:focus { border-color: #4f46e5; outline: none; ring: 2px solid #e0e7ff; }
+
+    /* Action Cards */
+    .action-card { cursor: pointer; border: 2px solid transparent; transition: all 0.2s; }
+    .action-radio:checked + .action-card { border-color: #4f46e5; background: #eef2ff; }
+    .action-radio:checked + .action-card .icon-box { background: #4f46e5; color: white; }
+
+    /* Gauge Container */
+    .gauge-container { position: relative; width: 300px; height: 150px; margin: 0 auto; overflow: hidden; }
+    .gauge-bg { position: absolute; top: 0; left: 0; width: 300px; height: 300px; border-radius: 50%; background: #e2e8f0; clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); }
+    .gauge-fill { 
+        position: absolute; top: 0; left: 0; width: 300px; height: 300px; border-radius: 50%; 
+        background: conic-gradient(from 180deg, #ef4444 0deg, #eab308 90deg, #22c55e 180deg); 
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%); 
+        transform: rotate(0deg); transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        transform-origin: center;
+    }
+    .gauge-center { 
+        position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 260px; height: 130px; 
+        background: white; border-top-left-radius: 150px; border-top-right-radius: 150px; 
+        display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 10px;
+    }
+
+    .slide-up { animation: slideUp 0.4s ease-out; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+
+<div class="sim-wrapper py-8">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+            <div class="lg:col-span-5 space-y-6">
+                
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 border-b border-gray-100 pb-2">1. Your Starting Point</h3>
+                    
+                    <div class="input-group">
+                        <label>Current Credit Score</label>
+                        <div class="flex items-center gap-3">
+                            <input type="range" id="base-score-slider" min="300" max="850" value="700" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                            <input type="number" id="base-score-input" value="700" class="w-20 p-2 border border-gray-300 rounded-lg font-bold text-center" min="300" max="850">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label>Total Limit</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-400">$</span>
+                                <input type="number" id="total-limit" value="10000" class="pro-input pl-7">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Current Debt</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-400">$</span>
+                                <input type="number" id="total-balance" value="2500" class="pro-input pl-7">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-lg p-3 flex justify-between items-center text-sm">
+                        <span class="font-semibold text-slate-500">Utilization:</span>
+                        <span id="current-util-display" class="font-black text-indigo-600">25%</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <h3 class="text-lg font-bold text-slate-900 mb-4 border-b border-gray-100 pb-2">2. Pick a Scenario</h3>
+                    
+                    <div class="grid grid-cols-3 gap-2 md:gap-3">
+    
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="pay" class="action-radio hidden" checked onchange="toggleInputs('pay')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-arrow-down"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Pay Down Balance</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="new_card" class="action-radio hidden" onchange="toggleInputs('new_card')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-credit-card"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Get New Card</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="limit_increase" class="action-radio hidden" onchange="toggleInputs('limit_increase')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-arrow-up-right-dots"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Increase Limit</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="mortgage" class="action-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-house"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Take Mortgage</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="auto" class="action-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-car"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Auto Loan</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="personal" class="action-radio hidden" onchange="toggleInputs('loan')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Personal Loan</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="consolidate" class="action-radio hidden" onchange="toggleInputs('consolidate')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-link"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Consolidate Debt</span>
+                            </div>
+                        </label>
+
+                        <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="late" class="action-radio hidden" onchange="toggleInputs('late')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-red-600 mb-2"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Miss Payment</span>
+                            </div>
+                        </label>
+                        
+                         <label class="cursor-pointer relative group">
+                            <input type="radio" name="action" value="spend" class="action-radio hidden" onchange="toggleInputs('spend')">
+                            <div class="action-card p-2 md:p-3 rounded-xl bg-slate-50 hover:bg-white border-2 border-transparent h-full flex flex-col items-center text-center transition-all">
+                                <div class="icon-box w-8 h-8 md:w-10 md:h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-indigo-600 mb-2"><i class="fa-solid fa-cart-shopping"></i></div>
+                                <span class="text-[10px] md:text-xs font-bold text-slate-700 leading-tight">Spend on Card</span>
+                            </div>
+                        </label>
+
+                    </div>
+
+                    <div id="dynamic-inputs" class="mt-6 pt-6 border-t border-gray-100 slide-up">
+                        <div class="input-group">
+                            <label>Amount to Pay Off</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-3 text-gray-400">$</span>
+                                <input type="number" id="action-amount" value="1000" class="pro-input pl-7">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateSimulation()" class="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transition-all transform active:scale-95">
+                        Run Simulation
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 relative overflow-hidden min-h-[500px] flex flex-col justify-center">
+                    
+                    <div class="text-center mb-8 relative z-10">
+                        <div class="gauge-container mb-4">
+                            <div class="gauge-bg"></div>
+                            <div class="gauge-fill" id="gauge-fill"></div> <div class="gauge-center">
+                                <div class="text-6xl font-black text-slate-900 tracking-tighter" id="result-score">700</div>
+                                <div class="text-sm font-bold uppercase text-gray-400 mt-1 mb-2" id="result-rating">Good</div>
+                            </div>
+                        </div>
+                        
+                        <div id="points-badge" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-500 rounded-full font-bold text-sm transition-all">
+                            <i class="fa-solid fa-minus"></i> No Change
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                            <div class="text-xs text-slate-500 font-bold uppercase mb-1">New Utilization</div>
+                            <div class="text-2xl font-black text-slate-900" id="res-util">25%</div>
+                            <div class="text-xs text-gray-400 mt-1">Ideal is &lt;10%</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                            <div class="text-xs text-slate-500 font-bold uppercase mb-1">Payment History</div>
+                            <div class="text-2xl font-black text-green-600" id="res-history">100%</div>
+                            <div class="text-xs text-gray-400 mt-1">Don't mess this up</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                            <div class="text-xs text-slate-500 font-bold uppercase mb-1">Inquiries / Mix</div>
+                            <div class="text-xl font-black text-slate-900" id="res-inquiries">Stable</div>
+                            <div class="text-xs text-gray-400 mt-1">Recent Activity</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 bg-indigo-50 rounded-xl border border-indigo-100">
+                        <h4 class="font-bold text-indigo-900 mb-2 flex items-center">
+                            <i class="fa-solid fa-robot mr-2"></i> CardSnark Verdict
+                        </h4>
+                        <p class="text-indigo-800 leading-relaxed" id="res-analysis">
+                            Enter your details and select an action to see if the banks will love you or block your number.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- SYNC SLIDER & INPUT ---
+    const baseSlider = document.getElementById('base-score-slider');
+    const baseInput = document.getElementById('base-score-input');
+
+    if(baseSlider && baseInput) {
+        baseSlider.addEventListener('input', (e) => {
+            baseInput.value = e.target.value;
+            updateBaselineUtil();
+        });
+        baseInput.addEventListener('input', (e) => {
+            baseSlider.value = e.target.value;
+            updateBaselineUtil();
+        });
+    }
+
+    // --- UTILIZATION TRACKING ---
+    const limitInput = document.getElementById('total-limit');
+    const balInput = document.getElementById('total-balance');
+    const utilDisplay = document.getElementById('current-util-display');
+
+    function updateBaselineUtil() {
+        if(!limitInput || !balInput) return;
+        const l = parseInt(limitInput.value) || 1;
+        const b = parseInt(balInput.value) || 0;
+        const u = Math.round((b / l) * 100);
+        
+        if(utilDisplay) {
+            utilDisplay.innerText = u + "%";
+            if(u < 10) utilDisplay.className = "font-black text-green-600";
+            else if(u < 30) utilDisplay.className = "font-black text-indigo-600";
+            else if(u < 50) utilDisplay.className = "font-black text-yellow-600";
+            else utilDisplay.className = "font-black text-red-600";
+        }
+    }
+
+    if(limitInput && balInput) {
+        [limitInput, balInput].forEach(i => i.addEventListener('input', updateBaselineUtil));
+    }
+
+    // --- DYNAMIC INPUT TOGGLING ---
+    const inputArea = document.getElementById('dynamic-inputs');
+
+    function toggleInputs(action) {
+        if(!inputArea) return;
+        let html = '';
+        let label = 'Amount';
+        let val = '1000';
+
+        // Custom Labels based on selection
+        if(action === 'pay') { label = 'Amount to Pay Off'; }
+        else if(action === 'spend') { label = 'Amount to Charge'; }
+        else if(action === 'new_card') { label = 'New Credit Limit'; val = '5000'; }
+        else if(action === 'limit_increase') { label = 'Requested Increase'; val = '2000'; }
+        else if(action === 'loan') { label = 'Loan Amount'; val = '15000'; }
+        else if(action === 'consolidate') { label = 'Amount to Consolidate'; val = '5000'; }
+
+        // Render HTML
+        if(action === 'late') {
+            html = `
+                <div class="input-group slide-up">
+                    <label>How Late?</label>
+                    <select id="action-late-type" class="pro-input">
+                        <option value="30">30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90">90+ Days</option>
+                    </select>
+                </div>`;
+        } else {
+            html = `
+                <div class="input-group slide-up">
+                    <label>${label}</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-gray-400">$</span>
+                        <input type="number" id="action-amount" value="${val}" class="pro-input pl-7">
+       
