@@ -21,4 +21,4 @@ Use the tool below to calculate your **Effective Annual Fee**.
 ### How to use this result
 If the number is **Red**, ask yourself: *Would I pay cash for these perks if I didn't have the card?* If the answer is no, the bank is winning.
 
-**Ready to find a better card?** [Check out our latest "No-BS" Card Reviews](/blog/)
+**Ready to find a better card?** [Check out our latest "No-BS" Card Reviews](/reviews/)
