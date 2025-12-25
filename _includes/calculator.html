@@ -1,0 +1,256 @@
+<style>
+  /* Base reset for the component */
+  .cs-calc-wrapper * {
+    box-sizing: border-box;
+  }
+
+  .cs-calc-wrapper {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 480px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f0f0f0;
+  }
+
+  .cs-calc-header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .cs-calc-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.25rem;
+    color: #1a1a1a;
+    font-weight: 700;
+  }
+
+  .cs-calc-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+
+  .cs-input-group {
+    margin-bottom: 20px;
+  }
+
+  .cs-input-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Modern Input Styling */
+  .cs-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .cs-currency-symbol {
+    position: absolute;
+    left: 12px;
+    color: #888;
+    font-weight: 500;
+  }
+
+  .cs-input-group input {
+    width: 100%;
+    padding: 12px 12px 12px 30px; /* Space for $ symbol */
+    font-size: 1rem;
+    border: 2px solid #e5e5e5;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    outline: none;
+    background: #fafafa;
+    color: #333;
+  }
+
+  .cs-input-group input:focus {
+    border-color: #333; /* Dark border on focus for premium feel */
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
+  }
+
+  /* Section Divider */
+  .cs-section-divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0 15px 0;
+  }
+  
+  .cs-section-divider span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    background: #fff;
+    padding-right: 10px;
+  }
+
+  .cs-section-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+  }
+
+  /* Result Card Styling */
+  .cs-result-card {
+    background: #111;
+    color: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    margin-top: 30px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cs-result-label {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .cs-result-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    display: block;
+  }
+
+  .cs-result-verdict {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #ffd700; /* Gold for contrast */
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  /* Dynamic Colors for Result */
+  .is-negative { color: #ff6b6b; } /* Red */
+  .is-positive { color: #4ade80; } /* Green */
+  .is-neutral { color: #fff; }
+
+  /* Mobile Tweaks */
+  @media (max-width: 600px) {
+    .cs-calc-wrapper { padding: 20px; }
+  }
+
+  /* Dark Mode Support (Optional - matches user system) */
+  @media (prefers-color-scheme: dark) {
+    .cs-calc-wrapper { background: #1a1a1a; border-color: #333; box-shadow: none; }
+    .cs-calc-header h3 { color: #fff; }
+    .cs-calc-header p { color: #aaa; }
+    .cs-input-group input { background: #2a2a2a; border-color: #444; color: #fff; }
+    .cs-input-group label { color: #ccc; }
+    .cs-section-divider span { background: #1a1a1a; }
+  }
+</style>
+
+<div class="cs-calc-wrapper">
+  <div class="cs-calc-header">
+    <h3>Annual Fee Calculator</h3>
+    <p>Do the math. Don't guess.</p>
+  </div>
+  
+  <div class="cs-input-group">
+    <label for="annualFee">Card Annual Fee</label>
+    <div class="cs-input-wrapper">
+      <span class="cs-currency-symbol">$</span>
+      <input type="number" id="annualFee" placeholder="695" oninput="calculateSnark()">
+    </div>
+  </div>
+
+  <div class="cs-section-divider">
+    <span>CREDITS YOU ACTUALLY USE</span>
+  </div>
+
+  <div class="cs-input-group">
+    <label>Dining / Uber Credits</label>
+    <div class="cs-input-wrapper">
+      <span class="cs-currency-symbol">$</span>
+      <input type="number" class="credit-input" placeholder="0" oninput="calculateSnark()">
+    </div>
+  </div>
+  
+  <div class="cs-input-group">
+    <label>Travel / Hotel Credits</label>
+    <div class="cs-input-wrapper">
+      <span class="cs-currency-symbol">$</span>
+      <input type="number" class="credit-input" placeholder="0" oninput="calculateSnark()">
+    </div>
+  </div>
+  
+  <div class="cs-input-group">
+    <label>Streaming / Other Perks</label>
+    <div class="cs-input-wrapper">
+      <span class="cs-currency-symbol">$</span>
+      <input type="number" class="credit-input" placeholder="0" oninput="calculateSnark()">
+    </div>
+  </div>
+
+  <div class="cs-result-card" id="resultCard">
+    <span class="cs-result-label">REAL EFFECTIVE ANNUAL FEE</span>
+    <span class="cs-result-value is-neutral" id="effectiveFee">--</span>
+    <div class="cs-result-verdict" id="verdictText">Enter your numbers...</div>
+  </div>
+</div>
+
+<script>
+  function calculateSnark() {
+    // 1. Get Annual Fee
+    const fee = parseFloat(document.getElementById('annualFee').value) || 0;
+    
+    // 2. Sum up all credits
+    const creditInputs = document.querySelectorAll('.credit-input');
+    let totalCredits = 0;
+    creditInputs.forEach(input => {
+      totalCredits += parseFloat(input.value) || 0;
+    });
+
+    // 3. Calculate Effective Fee
+    const effective = fee - totalCredits;
+    const resultElement = document.getElementById('effectiveFee');
+    const verdictElement = document.getElementById('verdictText');
+    const resultCard = document.getElementById('resultCard');
+
+    // 4. Update UI
+    if (fee === 0 && totalCredits === 0) {
+       resultElement.innerText = "--";
+       verdictElement.innerText = "Enter your numbers...";
+       resultElement.className = "cs-result-value is-neutral";
+       verdictElement.style.color = "#ffd700";
+       return;
+    }
+
+    if (effective > 0) {
+      // Losing money
+      resultElement.innerText = "-$" + Math.abs(effective);
+      resultElement.className = "cs-result-value is-negative"; // Red Text
+      verdictElement.innerText = "You are paying the bank for this card.";
+      verdictElement.style.color = "#ff6b6b"; 
+    } else if (effective < 0) {
+      // Winning money
+      resultElement.innerText = "+$" + Math.abs(effective);
+      resultElement.className = "cs-result-value is-positive"; // Green Text
+      verdictElement.innerText = "Nice work. You're beating the system.";
+      verdictElement.style.color = "#4ade80";
+    } else {
+      // Break even
+      resultElement.innerText = "$0";
+      resultElement.className = "cs-result-value is-neutral";
+      verdictElement.innerText = "It's a perfect wash.";
+      verdictElement.style.color = "#fff";
+    }
+  }
+</script>
